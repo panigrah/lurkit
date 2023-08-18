@@ -152,11 +152,6 @@ export default function Feed({ topic = 'popular', title, subreddit = true }: { t
   }
   return (
     <>
-      <Helmet>
-        <title>
-          {title || url}
-        </title>
-      </Helmet>
       <button 
         onClick={() => {
           setScrollPos(0)

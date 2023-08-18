@@ -42,7 +42,7 @@ export default function Navbar() {
               <ChevronLeftIcon className='w-8 h-8 stroke-slate-400 fill-slate-400'/>
             </button>
           <Listbox value={activeCommunity} onChange={setCommunity}>
-            <div className="relative mt-1 mx-auto flex">
+            <div className="relative mt-1 mx-auto flex w-80">
               <Listbox.Button className="relative mx-auto flex cursor-default rounded-lg py-2 pl-3 text-center text-slate-400 shadow-md focus:outline-none font-bold gap-x-2">
                 <span className="block truncate">{activeCommunity?.sub}</span>
                 <span className="pointer-events-none inset-y-0 flex items-center pr-2">
