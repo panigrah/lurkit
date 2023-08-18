@@ -4,7 +4,6 @@ import {
 } from '@tanstack/react-query'
 import { FeedItem, FeedItemSkeleton } from './FeedItem';
 import { FeedItemListingType } from '@/types';
-import { Helmet } from "react-helmet";
 import { useMutateSubscriptions, useQuerySubscriptions } from './s/queries';
 import { MediaViewer } from '@/components/MediaViewer';
 import { useSession } from 'next-auth/react';
@@ -13,7 +12,7 @@ import { useEffect, useRef } from 'react';
 import { useVirtualizer } from '@tanstack/react-virtual'
 import { useAtom } from 'jotai';
 import { activeCommunityAtom, scrollPositionAtom } from './atoms';
-import { ChevronUpIcon, MagnifyingGlassCircleIcon } from '@heroicons/react/24/solid';
+import { ChevronUpIcon } from '@heroicons/react/24/solid';
 import Link from 'next/link';
 import { Spinner } from '@/components/Spinner';
 
@@ -95,14 +94,6 @@ export default function Feed({ topic = 'popular', title, subreddit = true }: { t
   const items = data?.pages.length ? data.pages.flatMap(page => page.data.children) : []
   const isBusy = isLoading || isFetchingNextPage || isFetching
   const isEmpty = items.length === 0 && !isBusy
-
-  useEffect(() => {
-    if (typeof topic === 'string') {
-      setActiveCommunity({ sub: topic, id: topic })
-    }
-    setScrollPos(0)
-  }, [topic, setActiveCommunity, setScrollPos])
-
   const rowVirtualizer = useVirtualizer({
     count: hasNextPage ? items.length + 1 : items.length,
     getScrollElement: () => parentRef.current ?? null,
