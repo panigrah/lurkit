@@ -26,7 +26,7 @@ export async function POST(request: Request) {
   }
 
   if(!status) { //request to remove sub and subdoc exists. sub here will be the id of the sub
-    const res = await prisma.subscriptions.deleteMany({ where: { ownerId: user.id, id: sub }})
+    const res = await prisma.subscriptions.deleteMany({ where: { ownerId: user.id, OR: [{ id: sub }, { sub: sub }]}})
     return NextResponse.json(res)
   }
 

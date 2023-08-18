@@ -15,6 +15,7 @@ import { useAtom } from 'jotai';
 import { activeCommunityAtom, scrollPositionAtom } from './atoms';
 import { ChevronUpIcon, MagnifyingGlassCircleIcon } from '@heroicons/react/24/solid';
 import Link from 'next/link';
+import { Spinner } from '@/components/Spinner';
 
 export function FeedSkeleton() {
   return (
@@ -39,8 +40,7 @@ export function FeedSkeleton() {
   )
 }
 
-function SubscriptionControl({ item }: { item?: string | string[] }) {
-  const { status } = useSession()
+function SubscriptionControl({ item, enabled }: { item?: string | string[], enabled: boolean }) {
   const subscriptions = useQuerySubscriptions()
   const mutation = useMutateSubscriptions()
 
@@ -48,25 +48,26 @@ function SubscriptionControl({ item }: { item?: string | string[] }) {
     mutation.mutate({ sub, status })
   }
 
-  if (typeof item === 'string') {
+  if( enabled && typeof item === 'string' ) {
     const subIndex = (subscriptions.data ?? []).findIndex(s => s.sub === item)
     const subscribed = subIndex >= 0
-    return (
-      <button
-        disabled={status !== 'authenticated'}
-        className='rounded-md px-2 py-1 disabled:text-gray-300 dark:disabled:text-gray-700 outline-none'
-        onClick={() => toggleSubcription(item, !subscribed)}
-      >
-        {subscribed ? 'Leave' : 'Join'}
-      </button>
-    )
+    return (<button
+              disabled={mutation.isLoading}
+              className='rounded-md px-2 py-1 disabled:text-gray-300 dark:disabled:text-gray-700 ring-1 ring-gray-300 dark:ring-gray-700 flex gap-1 items-center'
+              onClick={() => toggleSubcription(item, !subscribed)}
+            >
+              {mutation.isLoading && <div className='w-5 h-5'><Spinner /></div>}
+              {subscribed ? 'Leave' : 'Join'}
+          </button>
+        )
+  } else {
+    return null
   }
-
-  return null;
 }
 
-export default function Feed({ topic = 'popular', title }: { topic?: string | string[], title?: string }) {
+export default function Feed({ topic = 'popular', title, subreddit = true }: { topic?: string | string[], title?: string, subreddit?: boolean }) {
   const url = typeof topic === 'string' ? topic : topic.join('+')
+  const { status } = useSession()
   const [, setActiveCommunity] = useAtom(activeCommunityAtom)
   const [scrollPos, setScrollPos] = useAtom(scrollPositionAtom)
   const {
@@ -171,8 +172,8 @@ export default function Feed({ topic = 'popular', title }: { topic?: string | st
         >
           <div className='flex-none flex justify-between w-full border-b dark:border-slate-700 py-2'>
             <div className='text-xl font-semibold'>{title || `/r/${url}`}</div>
-            <div className='flex items-center'>
-              <SubscriptionControl item={topic} />
+            <div className='flex items-center gap-2'>
+              <SubscriptionControl item={topic} enabled={status === 'authenticated' && subreddit } />
               <Link href={`/r/${topic}/search`}>
                 <MagnifyingGlassIcon className='w-5 h-5' />
               </Link>
