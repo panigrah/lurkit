@@ -22,7 +22,7 @@ export default function Page() {
           Home
         </title>
       </Helmet>
-      <Feed topic={subs} subreddit={false} />
+      <Feed topic={subs} subreddit={false} title='Home' />
     </>
   )
 }
