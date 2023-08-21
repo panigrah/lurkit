@@ -23,8 +23,14 @@ export const useMutateSubscriptions = () => {
         throw ({message: 'cannot update subscription' })
       }
     },
-    onSuccess: (data) => {
-      queryClient.refetchQueries(['subscriptions'])
+    onSettled: async(data, error, variables, context ) => {
+      if(!error) {
+        if(variables.status) { //added a new one
+          queryClient.setQueryData(['subscriptions'], (old) => [...(old as SubscriptionType[]), data])
+        } else { //deleted one
+          queryClient.setQueryData(['subscriptions'], (old) => ((old as SubscriptionType[]).filter( f => f.id !== variables.sub)))
+        }
+      }
     }
   })
 }
