@@ -9,7 +9,7 @@ import { MediaViewer } from '@/components/MediaViewer';
 import { ExclamationTriangleIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { Fragment, useEffect, useRef, useState } from 'react';
 import { useVirtualizer } from '@tanstack/react-virtual'
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useAtom } from 'jotai';
 import { ChevronUpDownIcon, ChevronUpIcon, MagnifyingGlassCircleIcon } from '@heroicons/react/24/solid';
 import { FeedItem } from '@/app/FeedItem';
@@ -73,12 +73,42 @@ function DropDown<T extends OptionType>({ value, onChange, options }: { value: T
 
 export default function Search({ params }: { params: { sub: string } }) {
   const sub = params.sub
-  const [searchText, setSearchText] = useState('')
-  const [keywords, setKeyword] = useState('')
-  const [selectedSort, setSelectedSort] = useState(sortOptions[0])
-  const [selectedDuration, setSelectedDuration] = useState(durationOptions[0])
-  const sort = selectedSort.key
-  const time = selectedDuration.key
+  const searchParams = useSearchParams()
+  const pathname = usePathname()
+  const router = useRouter()
+
+  const keywords = searchParams.get('q') || ''
+  const [searchText, setSearchText] = useState(keywords)
+  
+  const sort = searchParams.get('sort') || sortOptions[0].key
+  const selectedSort = sortOptions.find( s => s.key === sort ) ?? sortOptions[0]
+
+  const time = searchParams.get('time') || durationOptions[0].key
+  const selectedDuration  = durationOptions.find( s => s.key === time ) ?? durationOptions[0]
+
+  const setQueryParam = (key: string, value: string) => {
+    let qs = new URLSearchParams()
+    searchParams.forEach((v, k) => {
+      if( k !== key ) {
+        qs.append(k, v)
+      }
+    })
+    qs.append(key, value)
+    //console.log(qs.toString())
+    router.push(pathname + '?' + qs.toString())
+  }
+
+  const setKeyword = (q: string) => {
+    setQueryParam('q', q)
+  }
+
+  const setSelectedSort = (s: OptionType) => {
+    setQueryParam('sort', s.key)
+  }
+
+  const setSelectedDuration = (d: OptionType) => {
+    setQueryParam('time', d.key)
+  }
 
   const {
     isLoading,
@@ -170,7 +200,7 @@ export default function Search({ params }: { params: { sub: string } }) {
           ref={parentRef}
           className='h-full w-full overflow-auto flex flex-col p-1 sm:p-4 scroll-container'
         >
-          <form onSubmit={(e) => { e.preventDefault(); setKeyword(searchText) }}>
+          <form onSubmit={(e) => { e.preventDefault(); setKeyword(searchText || '') }}>
             <div className='flex ring-1 dark:ring-slate-700 rounded-md overflow-hidden ring-slate-300'>
               <input className='w-full border-none outline-none px-4 py-2' onChange={e => setSearchText(e.target.value)} />
               <button className='px-2'>
