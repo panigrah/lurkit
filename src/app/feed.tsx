@@ -200,8 +200,16 @@ export default function Feed({ topic = 'popular', title, subreddit = true }: { t
                   >
                     {isLoaderRow
                       ? hasNextPage
-                        ? <div className='w-full text-center my-4 text-sm font-bold text-slate-700 dark:text-slate-300'>Loading more...</div>
-                        : <div className='w-full text-center my-4 text-sm font-bold text-slate-700 dark:text-slate-300'>Nothing more to load</div>
+                        ?  <div className='w-full text-center my-4 text-sm text-slate-700 dark:text-slate-300'>
+                            <div className='ring-indigo-500 ring-1 rounded-full mx-auto px-3 py-2 w-fit'>
+                              Loading more...
+                            </div>
+                          </div>
+                        : <div className='w-full text-center my-4 text-sm text-slate-700 dark:text-slate-300'>
+                            <div className='ring-indigo-500 ring-1 rounded-full mx-auto px-3 py-2 w-fit'>
+                              No more posts
+                            </div>
+                          </div>
                       : <FeedItem item={post} />
                     }
                   </div>
