@@ -38,6 +38,7 @@
     "react-hls-player": "^3.0.7",
     "react-markdown": "^8.0.7",
     "react-slick": "^0.29.0",
+    "rehype-raw": "^6.1.1",
     "tailwindcss": "3.3.2",
     "typescript": "5.1.6",
     "use-debounce": "^9.0.4"

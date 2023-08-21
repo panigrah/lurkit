@@ -9,6 +9,7 @@ import { useAtom } from 'jotai';
 import { count } from '@/lib/format';
 import { ReactMarkdown } from 'react-markdown/lib/react-markdown';
 import { BookMarkControl } from './bookmarks/BookMarkControl';
+import rehypeRaw from 'rehype-raw'
 
 export function FeedItemSkeleton() {
   return (
@@ -109,7 +110,7 @@ export function FeedItem({ item, expand = false }: { item: FeedItemType; expand?
         </div>
         {item.data.selftext && (
           expand?
-          <ReactMarkdown className={'text-sm text-zinc-600 dark:text-zinc-400 prose dark:prose-invert max-w-none'}>
+          <ReactMarkdown rehypePlugins={[rehypeRaw]} className={'text-sm text-zinc-600 dark:text-zinc-400 prose dark:prose-invert max-w-none'}>
             {item.data.selftext}
           </ReactMarkdown>
           :

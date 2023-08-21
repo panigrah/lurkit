@@ -7,6 +7,7 @@ import {
 import { CommentThread } from './CommentThread';
 import { Helmet } from 'react-helmet';
 import { MediaViewer } from '@/components/MediaViewer';
+import { InboxIcon } from '@heroicons/react/24/outline';
 
 function CommentSkeleton() {
   return(
@@ -57,7 +58,16 @@ export default function CommentsPage({ params: { sub, id, topic } }: { params: {
         {post?.data && <FeedItem item={post} expand={true} /> }
       </div>
       <div className='flex flex-col gap-4 flex-auto'>
+        {items.length === 0? 
+        <div className='items-center h-full flex-auto flex'>
+          <div className='m-auto align-middle text-center'>
+            <InboxIcon className='w-10 h-10 mx-auto stroke-slate-400 dark:stroke-slate-600' />
+            <div className='text-slate-400 dark:text-slate-600 font-semibold'>No comments yet</div>
+          </div>
+        </div>
+        : 
         <CommentThread sub={post.data.subreddit} link={post.data.name} items={items} depth={0} />
+        }
       </div>
     </div>
     <MediaViewer />
