@@ -6,8 +6,10 @@ import { FormEvent, useState } from 'react';
 import { useMutateBookmarks, useDeleteBookmarks, useQueryBookmarks } from './queries';
 import { useSession } from 'next-auth/react';
 import { Spinner } from '@/components/Spinner';
+import { useQueryClient } from '@tanstack/react-query';
 
 export function BookMarkControl({ item }: { item: FeedItemType; }) {
+  const queryClient = useQueryClient()
   const { data: session, status } = useSession();
   const mutation = useMutateBookmarks()
   const removeBookmarkMutation = useDeleteBookmarks()

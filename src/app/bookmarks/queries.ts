@@ -25,7 +25,7 @@ export const useMutateBookmarks = () => {
       }
     },
     onSuccess: (data) => {
-      queryClient.refetchQueries(['bookmarks'])
+      queryClient.setQueryData(['bookmarks'], (marks) => [...(marks as BookMarkType[]), data])
     }
   })
 }
@@ -45,8 +45,8 @@ export const useDeleteBookmarks = () => {
         throw ({message: 'cannot delete bookmark' })
       }
     },
-    onSuccess: (data) => {
-      queryClient.refetchQueries(['bookmarks'])
+    onSuccess: (data, variables) => {
+      queryClient.setQueryData(['bookmarks'], (marks) => (marks as BookMarkType[]).filter( m => m.id !== variables.id))
     }
   })
 }
