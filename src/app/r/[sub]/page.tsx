@@ -1,9 +1,11 @@
 'use client'
 import { activeCommunityAtom, scrollPositionAtom } from "@/app/atoms";
-import Feed from "@/app/feed";
+//import Feed from "@/app/feed";
 import { useAtom } from "jotai";
 import { useEffect } from "react";
 import { Helmet } from "react-helmet";
+import Feed from './feed'
+import Subs from './subs'
 
 export default function Page({ params }: { params: { sub: string }}) {
   const [, setActiveCommunity] = useAtom(activeCommunityAtom)
@@ -21,7 +23,14 @@ export default function Page({ params }: { params: { sub: string }}) {
           {topic}
         </title>
       </Helmet>
-      <Feed topic={topic} />
+      <div className='space-y-5 flex-auto flex'>
+        <div className="max-w-[53rem] lg:flex flex-auto flex w-full mx-auto">
+          <div className="space-y-3 lg:mx-0  flex-auto flex flex-col">
+            <Subs active={topic} />
+            <Feed topic={topic} />
+          </div>
+        </div>
+    </div>
     </>
   )
 }

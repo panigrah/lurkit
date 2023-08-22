@@ -8,6 +8,7 @@ import { CommentThread } from './CommentThread';
 import { Helmet } from 'react-helmet';
 import { MediaViewer } from '@/components/MediaViewer';
 import { InboxIcon } from '@heroicons/react/24/outline';
+import PostPage from './post';
 
 function CommentSkeleton() {
   return(
@@ -16,8 +17,9 @@ function CommentSkeleton() {
     </div>
   )
 }
+
 //https://old.reddit.com/r/${permalink}.json?after=${page}`)
-export default function CommentsPage({ params: { sub, id, topic } }: { params: { sub: string, id: string, topic: string }}) {
+function CommentsPage({ params: { sub, id, topic } }: { params: { sub: string, id: string, topic: string }}) {
   const { isLoading, error, data, fetchNextPage,
     hasNextPage,
     isFetching,
@@ -75,4 +77,6 @@ export default function CommentsPage({ params: { sub, id, topic } }: { params: {
   )
 }
 
-
+export default function Page({ params }: { params: { sub: string, id: string, topic: string }}) {
+  return(<PostPage params={params} />)
+}

@@ -32,7 +32,7 @@ export function FeedItemSkeleton() {
 }
 
 const feedItemTypes = ['link', 'image', 'video', 'gallery']
-const getFeedType = (item: FeedItemType) => {
+export const getFeedType = (item: FeedItemType) => {
   //url_overridden_by_dest
   const category = (!!item.data.media?.reddit_video?.hls_url) ? 
                     'video' 

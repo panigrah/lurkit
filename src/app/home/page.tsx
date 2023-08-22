@@ -1,12 +1,16 @@
 'use client';
-import Feed from "@/app/feed";
 import { useQuerySubscriptions } from "../s/queries";
 import { Helmet } from "react-helmet";
 import { useEffect } from "react";
 import { useAtom } from "jotai";
 import { activeCommunityAtom } from "../atoms";
+import Feed from "../r/[sub]/feed";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
+  const { status } = useSession()
+  const router = useRouter()
   const { data, isLoading, error } = useQuerySubscriptions()
   const [, setActiveCommunity] = useAtom(activeCommunityAtom)
   const subs = data && data.length > 0? data.map( s => s.sub ) : ['popular']
@@ -14,6 +18,10 @@ export default function Page() {
   useEffect(() => {
     setActiveCommunity({ path: '/home' , sub: 'home', id: 'home' })
   })
+
+  if(status === 'unauthenticated') {
+    router.replace('/r/popular')
+  }
 
   return(
     <>
