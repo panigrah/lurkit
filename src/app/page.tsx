@@ -1,17 +1,13 @@
-'use client'
-import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
+import { getServerSession } from "next-auth"
+import { redirect } from 'next/navigation'
 
-export default function Home() {
-  const { status } = useSession()
-  const router = useRouter()
-  if( status === 'authenticated' ) {
-    router.replace('/home')
+//import { useSession } from 'next-auth/react'
+
+export default async function HomePage() {
+  const session = await getServerSession()
+  if( session?.user ) {
+    redirect('/home')
   } else {
-    router.replace('/r/popular')
+    redirect('/r/popular')
   }
-  return (
-    <>
-    </>
-  )
 }
