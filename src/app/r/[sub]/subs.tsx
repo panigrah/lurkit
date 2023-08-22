@@ -20,6 +20,7 @@ function Subreddit({item, active=false}: {item: SubscriptionType, active?: boole
     <div className="flex flex-col justify-between items-center gap-2 cursor-pointer">
       <div className={"rounded-full w-16 h-16 ring-1 ring-slate-300 dark:ring-slate-700"}>
         <div className={"rounded-full w-16 h-16 text-center p-2" + (active? ' ring-4 ring-indigo-600': '')}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img className="w-15 h-15 m-auto" src={image} alt={image} />
         </div>
       </div>

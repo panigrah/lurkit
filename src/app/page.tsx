@@ -1,6 +1,5 @@
 'use client'
 import { useSession } from 'next-auth/react'
-import { Helmet } from 'react-helmet'
 import { useRouter } from 'next/navigation'
 
 export default function Home() {
