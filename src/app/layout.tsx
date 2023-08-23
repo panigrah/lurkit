@@ -3,6 +3,7 @@ import Navbar from './navbar';
 import ContextProviders from './ContextProviders';
 import AuthProvider from './Session';
 import { BottomNav } from './BottomNav';
+import { MediaViewer } from '@/components/MediaViewer';
 
 export default function RootLayout({
   children,
@@ -36,6 +37,7 @@ export default function RootLayout({
           <main className="flex flex-auto overflow-hidden mb-16">
             {children}
           </main>
+          <MediaViewer />
           <BottomNav />
         </ContextProviders>
         </AuthProvider>

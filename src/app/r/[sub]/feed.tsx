@@ -174,7 +174,6 @@ export default function Feed({ topic = 'popular', title, subreddit = true }: { t
           </div>
         </section>
       </div>
-      <MediaViewer />
     </>
   )
 }
