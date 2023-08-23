@@ -127,7 +127,7 @@ export default function Post({ item, expand = false }: { item: FeedItemType, exp
       {/* Actions */}
       <div className="space-y-2 -mx-2">
         <div className="flex justify-between items-center">
-          <span className="font-semibold text-sm truncate">@{item.data.author} ({type})</span>
+          <span className="font-semibold text-sm truncate">@{item.data.author}</span>
           <h3 className="text-xs text-gray-500 flex-none truncate">
             {formatRelative(fromUnixTime(item.data.created_utc), Date.now())}
           </h3>

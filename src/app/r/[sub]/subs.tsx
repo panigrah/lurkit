@@ -37,8 +37,8 @@ function Subreddit({item, active=false}: {item: SubscriptionType, active?: boole
 }
 
 export default function Subscriptions({active}: {active: string}) {
-  const { data, isLoading, error } = useQuerySubscriptions()
   const { status } = useSession()
+  const { data, isLoading, error } = useQuerySubscriptions(status === 'authenticated')
 
   const subs = status !== 'authenticated'? defaultSubreddits: (data ?? [])
   return(

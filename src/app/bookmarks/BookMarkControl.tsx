@@ -13,7 +13,7 @@ export function BookMarkControl({ item }: { item: FeedItemType; }) {
   const { data: session, status } = useSession();
   const mutation = useMutateBookmarks()
   const removeBookmarkMutation = useDeleteBookmarks()
-  const bookmarks = useQueryBookmarks()
+  const bookmarks = useQueryBookmarks(status === 'authenticated')
   
   const addBookmark = () => {
     mutation.mutate({sub: item.data.subreddit, permalink: item.data.permalink, selftext: item.data.selftext, title: item.data.title}, { 

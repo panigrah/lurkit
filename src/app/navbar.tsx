@@ -23,7 +23,7 @@ export default function Navbar() {
   const { data: session, status } = useSession();
   const router = useRouter()
   const [visible, setVisible] = useState(true)
-  const { data, isLoading, error } = useQuerySubscriptions()
+  const { data, isLoading, error } = useQuerySubscriptions(status === 'authenticated')
   const [activeCommunity, setActiveCommunity] = useAtom(activeCommunityAtom)
   const communities = data ? [{ sub: 'home', path: '/home' }, ...defaultCommunities, ...data] : [...defaultCommunities];
 

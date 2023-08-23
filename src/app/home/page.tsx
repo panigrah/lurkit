@@ -11,7 +11,7 @@ import { useRouter } from "next/navigation";
 export default function Page() {
   const { status } = useSession()
   const router = useRouter()
-  const { data, isLoading, error } = useQuerySubscriptions()
+  const { data, isLoading, error } = useQuerySubscriptions(status === 'authenticated')
   const [, setActiveCommunity] = useAtom(activeCommunityAtom)
   const subs = data && data.length > 0? data.map( s => s.sub ) : ['popular']
 

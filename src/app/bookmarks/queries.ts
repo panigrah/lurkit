@@ -1,11 +1,12 @@
 import { BookMarkType } from "@/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-export const useQueryBookmarks = () => useQuery<BookMarkType[]>({
+export const useQueryBookmarks = (enabled = true) => useQuery<BookMarkType[]>({
   queryKey: ['bookmarks'],
   queryFn: () => fetch('/api/bookmarks').then( res => res.json()),
   staleTime: Infinity,
-  retry: false
+  retry: false,
+  enabled
 })
 
 export const useMutateBookmarks = () => { 

@@ -1,10 +1,11 @@
 import { SubscriptionType } from "@/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-export const useQuerySubscriptions = () => useQuery<SubscriptionType[]>({
+export const useQuerySubscriptions = (enabled = true) => useQuery<SubscriptionType[]>({
   queryKey: ['subscriptions'],
   queryFn: () => fetch('/api/subscriptions').then( res => res.json()),
-  retry: false
+  retry: false,
+  enabled
 })
 
 export const useMutateSubscriptions = () => { 
