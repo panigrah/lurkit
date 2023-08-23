@@ -40,7 +40,7 @@ export type MediaType = {
 }
 
 export type FeedDataType = {
-  post_hint: "hosted:video" | "link" | "text" | "image";
+  post_hint: "hosted:video" | "link" | "text" | "image" | "gallery";
   subreddit: string;
   author_fullname: string;
   selftext?: string;

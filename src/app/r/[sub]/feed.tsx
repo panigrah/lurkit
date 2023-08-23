@@ -16,6 +16,7 @@ import { ChevronUpIcon } from '@heroicons/react/24/solid';
 import Link from 'next/link';
 import { Spinner } from '@/components/Spinner';
 import { FeedSkeleton } from './feed-skeleton';
+import { useQueryFeed } from './queries';
 
 function SubscriptionControl({ item, enabled }: { item?: string | string[], enabled: boolean }) {
   const subscriptions = useQuerySubscriptions()
@@ -53,19 +54,8 @@ export default function Feed({ topic = 'popular', title, subreddit = true }: { t
     hasNextPage,
     isFetching,
     isFetchingNextPage,
-  } = useInfiniteQuery<FeedItemListingType>({
-    queryKey: [topic],
-    staleTime: 100000,
-    queryFn: async ({ pageParam = '' }) => {
-      const result = await fetch(`https://old.reddit.com/r/${url}.json?after=${pageParam}`)
-        .then((res) => res.json())
-      if (result && 'error' in result) {
-        throw result
-      }
-      return result
-    },
-    getNextPageParam: (lastPage, pages) => lastPage.data.after,
-  })
+  } = useQueryFeed(topic)
+  
   const parentRef = useRef<HTMLDivElement>(null)
   const items = data?.pages.length ? data.pages.flatMap(page => page.data.children) : []
   const isBusy = isLoading || isFetchingNextPage || isFetching
@@ -73,7 +63,7 @@ export default function Feed({ topic = 'popular', title, subreddit = true }: { t
   const rowVirtualizer = useVirtualizer({
     count: hasNextPage ? items.length + 1 : items.length,
     getScrollElement: () => parentRef.current ?? null,
-    estimateSize: (index: number) => 200,
+    estimateSize: (index: number) => 700, //200 for simple view
     overscan: 5,
     initialOffset: scrollPos,
     onChange: (instance) => {
