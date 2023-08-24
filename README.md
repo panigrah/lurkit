@@ -15,3 +15,6 @@ pnpm dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+1. You can directly browse to a subreddit with http://localhost:3000/r/subreddit
+2. to browse to a multireddit you join all subreddits with a %2b. e.g. For cats dogs and funny you would do http://localhost:3000/r/cats%2bdogs%2bfunny
+   
