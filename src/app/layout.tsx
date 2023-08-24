@@ -1,4 +1,5 @@
 import './globals.css'
+import { Analytics } from '@vercel/analytics/react';
 import Navbar from './navbar';
 import ContextProviders from './ContextProviders';
 import AuthProvider from './Session';
@@ -41,6 +42,7 @@ export default function RootLayout({
           <BottomNav />
         </ContextProviders>
         </AuthProvider>
+        <Analytics />
       </body>
     </html>
   )
