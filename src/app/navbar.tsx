@@ -72,7 +72,7 @@ function SelectAndSearchCommunity() {
               <Combobox.Option 
                 className={'relative cursor-default select-none py-2 pl-10 pr-4'}
                 value={{ id: null, sub: query }}>
-                <span className='block font-normal'>go to {query}</span>
+                <span className='block font-normal text-gray-900'>go to {query}</span>
               </Combobox.Option>
             )}
             {(filteredCommunities.length === 0 && query !== '')? (
