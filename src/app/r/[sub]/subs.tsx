@@ -3,18 +3,9 @@ import { useQuerySubscriptions } from "@/app/s/queries";
 import { SubscriptionType } from "@/types";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-
-const defaultSubreddits = [
-  {id: 'popular', sub: 'popular' },
-  {id: 'politics', sub: 'politics' },
-  {id: 'funny', sub: 'funny' },
-  {id: 'books', sub: 'books' },
-  {id: 'movies', sub: 'movies' },
-  {id: 'television', sub: 'television' }
-]
+import defaultSubreddits from "@/app/default-subs";
 
 function Subreddit({item, active=false}: {item: SubscriptionType, active?: boolean}) {
-  const image = 'http://avatars.dicebear.com/api/bottts/stefan.svg';
 
   return(
     <div className="flex flex-col justify-between items-center gap-2 cursor-pointer">
@@ -28,7 +19,7 @@ function Subreddit({item, active=false}: {item: SubscriptionType, active?: boole
       </div>
      */}
       <span className={"text-xs " + (active? ' border-b-2 border-indigo-600': '')}>
-        <Link href={`/r/${item.sub}`}>
+        <Link href={item.path || `/r/${item.sub}`}>
           {item.sub}
         </Link>
       </span>
@@ -39,8 +30,11 @@ function Subreddit({item, active=false}: {item: SubscriptionType, active?: boole
 export default function Subscriptions({active}: {active: string}) {
   const { status } = useSession()
   const { data, isLoading, error } = useQuerySubscriptions(status === 'authenticated')
+  let subs = defaultSubreddits
+  if(status === 'authenticated') {
+    subs = [{ id: 'home', path: '/home', sub: 'home' }, ...(data ?? [])]
+  } 
 
-  const subs = status !== 'authenticated'? defaultSubreddits: (data ?? [])
   return(
     <section className="card w-full flex gap-4 overflow-x-scroll scrollbar-thin scrollbar-thumb-gray-900 scrollbar-track-gray-100 w-ful flex-none">
       { subs.map(d => <Subreddit item={d} key={d.id} active={active === d.id} />) }

@@ -10,14 +10,13 @@ import { SubscriptionType } from '@/types';
 import { useAtom } from 'jotai';
 import { activeCommunityAtom } from './atoms';
 import Link from 'next/link';
+import defaultSubreddits from './default-subs';
 
 export function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-const defaultCommunities = [
-  { sub: 'popular', id: 'popular' },
-]
+const defaultCommunities = defaultSubreddits
 
 function SelectAndSearchCommunity() {
   const router = useRouter()
