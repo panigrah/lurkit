@@ -34,3 +34,18 @@ body {
     @apply border-[1px] overflow-hidden border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-slate-950 px-5 p-4 max-w-[30rem] mx-auto w-screen sm:w-auto
   }
 }
+
+@layer utilities {
+  @variants responsive {
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* Hide scrollbar for IE, Edge and Firefox */
+    .no-scrollbar {
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
+    }
+  }
+}

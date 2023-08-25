@@ -2,7 +2,7 @@ import { promises as fs } from 'fs';
 import { NextResponse } from 'next/server';
 
 
-/*
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
   const page = searchParams.get('page')
@@ -14,9 +14,8 @@ export async function GET(request: Request) {
   //Return the content of the data file in json format
   return NextResponse.json(JSON.parse(fileContents));
 }
-*/
 
-export async function GET(request: Request) {
+export async function GETx(request: Request) {
   const { searchParams } = new URL(request.url)
   const page = searchParams.get('page')
   //Find the absolute path of the json directory

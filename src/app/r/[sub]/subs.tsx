@@ -36,8 +36,10 @@ export default function Subscriptions({active}: {active: string}) {
   } 
 
   return(
-    <section className="card w-full flex gap-4 overflow-x-scroll scrollbar-thin scrollbar-thumb-gray-900 scrollbar-track-gray-100 w-ful flex-none">
-      { subs.map(d => <Subreddit item={d} key={d.id} active={active === d.id} />) }
+    <section className="card overflow-hidden flex flex-none rounded-none p-2 border-none bg-slate-100">
+      <div className="flex flex-row gap-4 overflow-scroll no-scrollbar">
+        { subs.map(d => <Subreddit item={d} key={d.id} active={active === d.id} />) }
+      </div>
     </section>
   )
 }

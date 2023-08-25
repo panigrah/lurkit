@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
 import { promises as fs } from 'fs';
 
-/*
-export async function GETx(request: Request) {
+//for testing retrieve saved feed json.
+export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
   const page = searchParams.get('page')
   //Find the absolute path of the json directory
@@ -13,9 +13,8 @@ export async function GETx(request: Request) {
   //Return the content of the data file in json format
   return NextResponse.json(JSON.parse(fileContents));
 }
-*/
 
-export async function GET(request: Request,  { params }: { params: { sub: string } }) {
+export async function GETx(request: Request,  { params }: { params: { sub: string } }) {
   const { searchParams } = new URL(request.url)
   const page = searchParams.get('page')
   //Find the absolute path of the json directory
