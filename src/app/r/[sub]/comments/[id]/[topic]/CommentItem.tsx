@@ -9,6 +9,7 @@ import { count } from '@/lib/format';
 import { useQuery } from '@tanstack/react-query';
 import { Spinner } from '@/components/Spinner';
 import { ReactMarkdown } from 'react-markdown/lib/react-markdown';
+import remarkGiphy from './remark-giphy';
 
 const depthColors = [
   'border-l-slate-400 dark:border-l-slate-600',
@@ -106,7 +107,10 @@ export function CommentItem({ item, sub, link, depth }: { item: CommentItemType;
             </div>
           </div>
           {!collapsed &&
-            <ReactMarkdown className='mt-0.5 text-base prose dark:prose-invert max-w-none break-words hyphens-auto word-break-break-word'>
+            <ReactMarkdown 
+              remarkPlugins={[remarkGiphy]}
+              className='mt-0.5 text-base prose dark:prose-invert max-w-none break-words hyphens-auto word-break-break-word'
+            >
               {item.data.body}
             </ReactMarkdown>
           }
