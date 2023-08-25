@@ -193,15 +193,15 @@ export default function Navbar() {
   const [activeCommunity, setActiveCommunity] = useAtom(activeCommunityAtom)
  
   return (
-    <nav className={"bg-gray-800 flex-none sticky left-0 w-full z-20 h-9 " + (visible ? 'top-0' : '-top-16')}>
+    <nav className={"bg-gray-800 flex flex-none sticky left-0 w-full z-20 h-9 " + (visible ? 'top-0' : '-top-16')}>
       <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 flex items-center">
         <button onClick={() => router.back()}>
-          <ChevronLeftIcon className='w-7 h-7 stroke-slate-400 fill-slate-400' />
+          <ChevronLeftIcon className='w-6 h-6 stroke-slate-400 fill-slate-400' />
         </button>
         <SelectAndSearchCommunity />
         {activeCommunity?.sub && 
           <Link href={`/r/${activeCommunity?.sub}/search`}>
-            <MagnifyingGlassIcon className='w-7 h-7 stroke-slate-400' />
+            <MagnifyingGlassIcon className='w-6 h-6 stroke-slate-400' />
           </Link>
         }
       </div>
