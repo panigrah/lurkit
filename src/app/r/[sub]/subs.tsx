@@ -36,7 +36,7 @@ export default function Subscriptions({active}: {active: string}) {
   } 
 
   return(
-    <section className="card overflow-hidden flex flex-none rounded-none p-2 border-none bg-slate-100">
+    <section className="card overflow-hidden flex flex-none rounded-none py-2 border-none bg-slate-100">
       <div className="flex flex-row gap-4 overflow-scroll no-scrollbar">
         { subs.map(d => <Subreddit item={d} key={d.id} active={active === d.id} />) }
       </div>
