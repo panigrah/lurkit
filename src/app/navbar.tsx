@@ -194,7 +194,7 @@ export default function Navbar() {
  
   return (
     <nav className={"bg-gray-800 flex flex-none sticky left-0 w-full z-20 h-9 " + (visible ? 'top-0' : '-top-16')}>
-      <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 flex items-center">
+      <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 flex items-center w-full justify-between">
         <button onClick={() => router.back()}>
           <ChevronLeftIcon className='w-6 h-6 stroke-slate-400 fill-slate-400' />
         </button>
