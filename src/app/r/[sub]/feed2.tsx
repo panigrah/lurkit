@@ -6,7 +6,7 @@ import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 import { ChevronUpIcon } from '@heroicons/react/24/solid';
 import { useAtom } from 'jotai';
 import { useRef } from 'react';
-import { Virtuoso } from 'react-virtuoso';
+import { Virtuoso, VirtuosoHandle } from 'react-virtuoso';
 import { FeedSkeleton } from './feed-skeleton';
 import Post from './post';
 import { useQueryFeed } from './queries';
@@ -56,6 +56,7 @@ function SubscriptionControl({ item, enabled }: { item?: string | string[], enab
 export default function Feed({ topic = 'popular', title, subreddit = true }: { topic?: string | string[], title?: string, subreddit?: boolean }) {
   const url = typeof topic === 'string' ? topic : topic.join('+')
   const [scrollPos, setScrollPos] = useAtom(scrollPositionAtom)
+  const ref = useRef<VirtuosoHandle>(null)
   const {
     isLoading,
     error,
@@ -95,6 +96,7 @@ export default function Feed({ topic = 'popular', title, subreddit = true }: { t
       <button 
         onClick={() => {
           setScrollPos(0)
+          ref.current?.scrollToIndex(0)
           //rowVirtualizer.scrollToOffset(0)
         }}
         className='fixed z-[90] bottom-16 right-8 bg-indigo-600 text-white flex drop-shadow-lg rounded-full w-10 h-10 justify-center items-center'>
@@ -106,7 +108,8 @@ export default function Feed({ topic = 'popular', title, subreddit = true }: { t
           className='h-full w-full overflow-auto flex flex-col scroll-container'
         >
           <Virtuoso 
-            initialTopMostItemIndex={scrollPos}
+            ref={ref}
+            initialTopMostItemIndex={scrollPos > items.length? 0: scrollPos }
             context={{ hasNextPage, isFetching }}
             style={{ height: '100%' }}
             totalCount={items.length}
