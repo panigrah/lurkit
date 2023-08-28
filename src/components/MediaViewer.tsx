@@ -9,6 +9,8 @@ import useEmblaCarousel from 'embla-carousel-react'
 import { decode } from 'he';
 import Dots from './dots';
 import { XCircleIcon } from '@heroicons/react/24/solid';
+import 'react-photoswipe/lib/photoswipe.css'
+import {PhotoSwipe} from 'react-photoswipe';
 
 const fallbackMediaURL = ''
 
@@ -94,6 +96,28 @@ export function MediaViewer() {
   const type = (preview?.post_hint? preview.post_hint : (preview?.gallery_data? 'gallery' : 'unknown')) as string
   const isOpen = preview !== null && (type === 'hosted:video' || type === 'image' || type === 'gallery')
   
+  if((type === 'gallery' && preview) || (type === 'image' && media_url)) {
+    let items:any = []
+    if( type === 'gallery') {
+      const g = preview?.media_metadata || {}
+      items = Object.values(g).map( g => ({
+        src: decode(g.s.u),
+        w: g.s.x,
+        h: g.s.y,
+        title: g.m
+      }))
+    } else {
+      const src = preview?.preview?.images?.[0].source.url ?? fallbackMediaURL
+      items = [{
+        src: decode(src),
+        w: preview?.preview?.images?.[0].source.width || 400,
+        h: preview?.preview?.images?.[0].source.height || 600,
+        title: preview?.title || 'no title',
+      }]
+    }
+    return ( <PhotoSwipe isOpen={isOpen} items={items} options={{}} onClose={() => setPreview(null)}/> )
+  }
+
   return (
     <Transition appear show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-[100]" onClose={() => setPreview(null)}>

@@ -97,7 +97,7 @@ export default function Post({ item, expand = false }: { item: FeedItemType, exp
         </div>
         <Link
           href={`/r/${item.data.subreddit}`}
-          className="text-slate-400 dark:text-slate-600 text-sm"
+          className="text-zinc-600 dark:text-zinc-400 text-sm"
         >
           /r/{item.data.subreddit}
         </Link>
@@ -134,11 +134,11 @@ export default function Post({ item, expand = false }: { item: FeedItemType, exp
         </div>
         {item.data.selftext && (
           expand ?
-            <ReactMarkdown rehypePlugins={[rehypeRaw]} className={'text-sm text-zinc-600 dark:text-zinc-400 prose dark:prose-invert max-w-none'}>
+            <ReactMarkdown rehypePlugins={[rehypeRaw]} className={'text-zinc-600 dark:text-zinc-400 prose dark:prose-invert max-w-none'}>
               {item.data.selftext}
             </ReactMarkdown>
             :
-            <div className='text-sm text-zinc-600 dark:text-zinc-400 line-clamp-4 text-ellipsis'>
+            <div className=' text-zinc-600 dark:text-zinc-400 line-clamp-4 text-ellipsis'>
               {item.data.selftext}
             </div>
         )}
