@@ -9,7 +9,7 @@ import { MediaViewer } from '@/components/MediaViewer';
 import { useSession } from 'next-auth/react';
 import { ExclamationTriangleIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { useEffect, useRef } from 'react';
-import { useVirtualizer } from '@tanstack/react-virtual'
+import { observeElementOffset, useVirtualizer } from '@tanstack/react-virtual'
 import { useAtom } from 'jotai';
 import { activeCommunityAtom, scrollPositionAtom } from '@/app/atoms';
 import { ChevronUpIcon } from '@heroicons/react/24/solid';
@@ -66,6 +66,12 @@ export default function Feed({ topic = 'popular', title, subreddit = true }: { t
     estimateSize: (index: number) => 700, //200 for simple view
     overscan: 5,
     initialOffset: scrollPos,
+    /*
+    observeElementOffset: (instance, cb) => {
+      return observeElementOffset(instance, (offset) => {
+        console.log('scrolled to:', offset)
+        cb(offset)
+    })}, */
     onChange: (instance) => {
       setScrollPos(instance.scrollOffset)
     }

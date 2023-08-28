@@ -12,6 +12,7 @@ import { getFeedType } from "@/app/FeedItem";
 import { FolderIcon, MagnifyingGlassCircleIcon, PlayCircleIcon } from "@heroicons/react/24/solid";
 import { useAtom } from "jotai";
 import { previewAtom } from "@/app/atoms";
+import Video, { HLSVideo } from "@/components/video";
 
 export function PostSkeleton() {
   return (
@@ -73,8 +74,10 @@ function PreviewControl({ type, item }: { type: string, item: FeedItemType }) {
   )
 }
 
-export default function Post({ item, expand = false }: { item: FeedItemType, expand?: boolean }) {
+export default function Post({ item, expand = false, index }: { item: FeedItemType, expand?: boolean, index?: number }) {
   let src = item.data.preview?.images?.[0]?.source.url
+  const media_url = item.data?.media?.reddit_video?.hls_url
+
   const type = getFeedType(item)
   //for gallery the preview is in the gallery metadata
   if(type === 'gallery' && !src && item.data.media_metadata) {
@@ -105,14 +108,20 @@ export default function Post({ item, expand = false }: { item: FeedItemType, exp
       {/* Posted Image */}
       {src &&
         <div className="flex relative -mx-5 aspect-square overflow-hidden">
-          {/** show video, gallery or image or nothing... depending on whats posted ***/}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img className="w-full bg-cover object-cover aspect-square" src={decode(src)} alt={item.data.title} />
-          <PreviewControl item={item} type={type} />
+          { (type === 'video' && media_url) ?
+            <HLSVideo src={decode(media_url)} index={index} />
+            :
+            <>
+              {/** show video, gallery or image or nothing... depending on whats posted ***/}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img className="w-full bg-cover object-cover aspect-square" src={decode(src)} alt={item.data.title} />
+              <PreviewControl item={item} type={type} />
+            </>
+          }
         </div>
       }
       {(item.data.url_overridden_by_dest && type === 'link') &&
-        <div className="flex divide-x border-b -mx-6 pb-2 px-2">
+        <div className="flex divide-x border-b -mx-6 pb-2 px-2 dark:border-b-slate-700 dark:divide-slate-700">
           <LinkIcon className="w-4 h-4 flex-none mr-2" />
           <a
             className="flex-auto flex pl-2 min-w-0"

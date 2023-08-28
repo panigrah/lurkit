@@ -4,7 +4,7 @@ import { activeCommunityAtom, scrollPositionAtom } from "@/app/atoms";
 import { useAtom } from "jotai";
 import { useEffect } from "react";
 import { Helmet } from "react-helmet";
-import Feed from './feed'
+import Feed from './feed2'
 import Subs from './subs'
 
 export default function Page({ params }: { params: { sub: string }}) {

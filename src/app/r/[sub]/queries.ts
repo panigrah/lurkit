@@ -6,6 +6,7 @@ export const useQueryFeed = (topic: string | string[]) => useInfiniteQuery<FeedI
   queryFn: async ({pageParam = ''}) => {
     const url = typeof topic === 'string' ? topic : topic.join('+')
     const result = await fetch(`https://old.reddit.com/r/${url}.json?after=${pageParam}`)
+//    const result = await fetch(`/api/feed/${url}?after=${pageParam}`)
       .then((res) => res.json())
     if (result && 'error' in result) {
       throw result
