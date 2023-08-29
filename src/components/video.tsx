@@ -117,9 +117,12 @@ export function Video({item}: {item: FeedDataType}) {
   if(item.media?.reddit_video?.hls_url) {
     const hls_url = item.media.reddit_video.hls_url
     return(<HLSVideo src={decode(hls_url)} />)
-  } else if( item.post_hint === 'rich:video' && item.media?.type === 'youtube.com') {
+  } else if( item.post_hint === 'rich:video' && item.url) {
     return <ReactPlayer url={item.url} />
   } else {
-    return <div>unknown media</div>
+    return <div className="p-4 text-center flex-auto items-center flex flex-col justify-center">
+            <div className="text-rose-500">unknown media type {item.media?.type}</div>
+            <a href={item.url}>Click to open</a>
+        </div>
   }
 }
