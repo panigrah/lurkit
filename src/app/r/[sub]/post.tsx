@@ -93,7 +93,7 @@ export default function Post({ item, expand = false, index }: { item: FeedItemTy
           <div className="flex gap-3 items-center">
             <h2 className=" font-semibold">
               <Link href={`${item.data.permalink}`} scroll={false}>
-                {item.data.title} ({type})
+                {item.data.title}
               </Link>
             </h2>
           </div>

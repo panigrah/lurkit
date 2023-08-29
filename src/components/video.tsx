@@ -6,7 +6,7 @@ import { decode } from "he";
 import { useAtomValue } from "jotai";
 import { useEffect, useRef } from "react";
 import ReactHlsPlayer from "react-hls-player";
-import ReactPlayer from "react-player";
+import ReactPlayer from "react-player/lazy";
 
 /*
 const VideoEl = styled.video<{ blur?: boolean }>`
