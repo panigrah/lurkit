@@ -144,3 +144,9 @@ export type BookMarkType = {
   title: string;
   selftext?: string;
 }
+
+export type CommunitySettingsType = {
+  [index: string]: {
+    pos: number; //scroll position
+    refreshTime?: number; //when last viewed
+  }};

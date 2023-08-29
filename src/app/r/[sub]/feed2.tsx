@@ -1,5 +1,5 @@
 'use client';
-import { scrollPositionAtom } from '@/app/atoms';
+import { communitySettingsAtom, scrollPositionAtom } from '@/app/atoms';
 import { useMutateSubscriptions, useQuerySubscriptions } from "@/app/s/queries";
 import { Spinner } from '@/components/Spinner';
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
@@ -55,7 +55,8 @@ function SubscriptionControl({ item, enabled }: { item?: string | string[], enab
 
 export default function Feed({ topic = 'popular', title, subreddit = true }: { topic?: string | string[], title?: string, subreddit?: boolean }) {
   const url = typeof topic === 'string' ? topic : topic.join('+')
-  const [scrollPos, setScrollPos] = useAtom(scrollPositionAtom)
+  const [settings, setSettings] = useAtom(communitySettingsAtom)  
+  const scrollPos = settings[url]?.pos ?? 0
   const ref = useRef<VirtuosoHandle>(null)
   const {
     isLoading,
@@ -91,13 +92,13 @@ export default function Feed({ topic = 'popular', title, subreddit = true }: { t
   if (isLoading) {
     return <FeedSkeleton />
   }
+  
   return (
     <>
       <button 
         onClick={() => {
-          setScrollPos(0)
+          setSettings( prev => ({ ...prev, [url]: { pos: 0 }}))
           ref.current?.scrollToIndex(0)
-          //rowVirtualizer.scrollToOffset(0)
         }}
         className='fixed z-[90] bottom-16 right-8 bg-indigo-600 text-white flex drop-shadow-lg rounded-full w-10 h-10 justify-center items-center'>
         <ChevronUpIcon className='w-5 h-5' />
@@ -116,14 +117,15 @@ export default function Feed({ topic = 'popular', title, subreddit = true }: { t
             components={{ Footer }}
             endReached={loadMore}
             overscan={5}
-            rangeChanged={(range) => setScrollPos(range.startIndex)}
+            rangeChanged={(range) => {
+              setSettings( prev => ({ ...prev, [url]: { pos: range.startIndex }}))
+            }}
             itemContent={ (index, item) => (
               <div className='pb-3'>
                 <Post item={items[index]} index={index} />
               </div>
             )}
           />
-          
         </section>
       </div>
     </>
