@@ -29,6 +29,20 @@ export type GalleryMetaDataType = {
 }
 
 export type MediaType = {
+  type?: string;
+  oembed?: {
+    provider_url: string;
+    title: string;
+    html: string;
+    thumbnail_width: number;
+    height: number;
+    width: number;
+    version: string;
+    provider_name: string;
+    thumbnail_url: string;
+    type: string;
+    thumbnail_height: number;
+  };
   reddit_video?: {
     fallback_url: string;
     hls_url: string;
@@ -40,7 +54,7 @@ export type MediaType = {
 }
 
 export type FeedDataType = {
-  post_hint: "hosted:video" | "link" | "text" | "image" | "gallery";
+  post_hint: "hosted:video" | "link" | "text" | "image" | "gallery" | "rich:video";
   subreddit: string;
   author_fullname: string;
   selftext?: string;

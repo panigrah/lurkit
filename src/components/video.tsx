@@ -1,9 +1,12 @@
 //import { useIonViewWillEnter, useIonViewWillLeave } from "@ionic/react";
 //import { Dictionary } from "@reduxjs/toolkit";
 import { scrollPositionAtom } from "@/app/atoms";
+import { FeedDataType } from "@/types";
+import { decode } from "he";
 import { useAtomValue } from "jotai";
 import { useEffect, useRef } from "react";
 import ReactHlsPlayer from "react-hls-player";
+import ReactPlayer from "react-player";
 
 /*
 const VideoEl = styled.video<{ blur?: boolean }>`
@@ -18,7 +21,7 @@ const VideoEl = styled.video<{ blur?: boolean }>`
       transform: translate3d(0, 0, 0);
     `}
 `;
-*/
+
 
 interface VideoProps {
   src: string;
@@ -36,7 +39,6 @@ const videoPlaybackPlace: {[index: string]: number} = {};
 export default function Video({ src, controls, blur, className }: VideoProps) {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   
-  /*
   useIonViewWillLeave(() => {
     savePlace();
   });
@@ -44,7 +46,6 @@ export default function Video({ src, controls, blur, className }: VideoProps) {
   useIonViewWillEnter(() => {
     resume();
   });
-  */
 
   useEffect(() => {
     resume();
@@ -85,6 +86,7 @@ export default function Video({ src, controls, blur, className }: VideoProps) {
     />
   );
 }
+*/
 
 export function HLSVideo({ src, index }: { src: string, title?: string, index?: number}) {
   const playerRef = useRef<HTMLVideoElement>(null);
@@ -109,4 +111,15 @@ export function HLSVideo({ src, index }: { src: string, title?: string, index?: 
       playerRef={playerRef}
     />
   )
+}
+
+export function Video({item}: {item: FeedDataType}) {
+  if(item.media?.reddit_video?.hls_url) {
+    const hls_url = item.media.reddit_video.hls_url
+    return(<HLSVideo src={decode(hls_url)} />)
+  } else if( item.post_hint === 'rich:video' && item.media?.type === 'youtube.com') {
+    return <ReactPlayer url={item.url} />
+  } else {
+    return <div>unknown media</div>
+  }
 }

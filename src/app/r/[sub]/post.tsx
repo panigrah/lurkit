@@ -1,5 +1,5 @@
 'use client'
-import { FeedItemType } from "@/types";
+import { FeedDataType, FeedItemType } from "@/types";
 import { ArrowUpIcon, ArrowsRightLeftIcon, BookmarkIcon, ChatBubbleLeftIcon, ChevronRightIcon, EllipsisHorizontalIcon, EnvelopeIcon, HeartIcon, LinkIcon, ShareIcon } from "@heroicons/react/24/outline";
 import { formatRelative, fromUnixTime } from "date-fns";
 import { count } from '@/lib/format';
@@ -12,7 +12,8 @@ import { getFeedType } from "@/app/FeedItem";
 import { FolderIcon, MagnifyingGlassCircleIcon, PlayCircleIcon } from "@heroicons/react/24/solid";
 import { useAtom } from "jotai";
 import { previewAtom } from "@/app/atoms";
-import Video, { HLSVideo } from "@/components/video";
+import { Video } from "@/components/video";
+
 
 export function PostSkeleton() {
   return (
@@ -76,7 +77,7 @@ function PreviewControl({ type, item }: { type: string, item: FeedItemType }) {
 
 export default function Post({ item, expand = false, index }: { item: FeedItemType, expand?: boolean, index?: number }) {
   let src = item.data.preview?.images?.[0]?.source.url
-  const media_url = item.data?.media?.reddit_video?.hls_url
+  const media = item.data?.media
 
   const type = getFeedType(item)
   //for gallery the preview is in the gallery metadata
@@ -92,7 +93,7 @@ export default function Post({ item, expand = false, index }: { item: FeedItemTy
           <div className="flex gap-3 items-center">
             <h2 className=" font-semibold">
               <Link href={`${item.data.permalink}`} scroll={false}>
-                {item.data.title}
+                {item.data.title} ({type})
               </Link>
             </h2>
           </div>
@@ -108,8 +109,8 @@ export default function Post({ item, expand = false, index }: { item: FeedItemTy
       {/* Posted Image */}
       {src &&
         <div className="flex relative -mx-5 aspect-square overflow-hidden">
-          { (type === 'video' && media_url) ?
-            <HLSVideo src={decode(media_url)} index={index} />
+          { ((type === 'video' || type === 'rich:video') && media) ?
+            <Video item={item.data} />
             :
             <>
               {/** show video, gallery or image or nothing... depending on whats posted ***/}
