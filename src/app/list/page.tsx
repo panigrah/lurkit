@@ -6,6 +6,7 @@ import { useRef, useEffect, useState } from "react"
 import { communitySettingsAtom, scrollPositionAtom } from "../atoms"
 import { ReactMarkdown } from "react-markdown/lib/react-markdown"
 import remarkGiphy from "../r/[sub]/comments/[id]/[topic]/remark-giphy"
+import { decode } from "he"
 
 function Component({id}: {id: string}) {
   const [settings, setSettings] = useAtom(communitySettingsAtom)
@@ -53,6 +54,13 @@ export default function Page() {
       <F />
       <hr/>
       <D />
+      <ReactMarkdown className={'text-zinc-600 dark:text-zinc-400 prose dark:prose-invert max-w-none'}>
+        {`&gt;this is working or&amp; or not?`}
+      </ReactMarkdown>
+      <div>
+        <div>title</div>
+        {`&gt;this is working or&amp; or not?`}
+      </div>
     </div>
   )
   /*

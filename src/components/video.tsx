@@ -4,9 +4,10 @@ import { scrollPositionAtom } from "@/app/atoms";
 import { FeedDataType } from "@/types";
 import { decode } from "he";
 import { useAtomValue } from "jotai";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import ReactHlsPlayer from "react-hls-player";
-import ReactPlayer from "react-player/lazy";
+import ReactPlayer from "react-player";
+
 
 /*
 const VideoEl = styled.video<{ blur?: boolean }>`
@@ -114,15 +115,16 @@ export function HLSVideo({ src, index }: { src: string, title?: string, index?: 
 }
 
 export function Video({item}: {item: FeedDataType}) {
+  const ref = useRef<ReactPlayer>(null)
   if(item.media?.reddit_video?.hls_url) {
     const hls_url = item.media.reddit_video.hls_url
     return(<HLSVideo src={decode(hls_url)} />)
   } else if( item.post_hint === 'rich:video' && item.url) {
-    return <ReactPlayer url={item.url} />
+    return <ReactPlayer ref={ref} url={decode(item.url)}  />
   } else {
     return <div className="p-4 text-center flex-auto items-center flex flex-col justify-center">
             <div className="text-rose-500">unknown media type {item.media?.type}</div>
-            <a href={item.url}>Click to open</a>
+            <a href={decode(item.url)}>Click to open</a>
         </div>
   }
 }
