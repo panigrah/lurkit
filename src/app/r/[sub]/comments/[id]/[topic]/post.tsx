@@ -43,10 +43,10 @@ export default function PostPage({ params: { sub, id, topic } }: { params: { sub
       <div className='space-y-5 flex-auto flex overflow-hidden'>
         <div className="max-w-[53rem] lg:flex flex-auto flex w-full mx-auto">
           <div className='h-full w-full overflow-auto flex flex-col scroll-container'>
-            <div className="flex-auto">
+            <div className="flex-shrink-0">
               <Post item={post} expand={true} />
             </div>
-            <div className="flex flex-auto max-w-[30rem] mx-auto">
+            <div className="flex flex-auto max-w-[30rem] mx-auto w-full">
             {items.length === 0 ?
               <div className='items-center h-full flex-auto flex'>
                 <div className='m-auto align-middle text-center'>

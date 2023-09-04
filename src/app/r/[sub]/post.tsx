@@ -86,7 +86,7 @@ export default function Post({ item, expand = false, index }: { item: FeedItemTy
     src = firstItem.s.u
   }
   return (
-    <div className="relative card space-y-4">
+    <div className="relative card space-y-4 w-full">
       {/* Heading */}
       <div className="flex flex-col -m-2">
         <div className="flex justify-between items-center">
