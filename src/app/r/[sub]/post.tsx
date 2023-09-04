@@ -144,7 +144,7 @@ export default function Post({ item, expand = false, index }: { item: FeedItemTy
         </div>
         {item.data.selftext && (
           expand ?
-            <ReactMarkdown rehypePlugins={[rehypeRaw]} className={'text-zinc-600 dark:text-zinc-400 prose dark:prose-invert max-w-none'}>
+            <ReactMarkdown rehypePlugins={[rehypeRaw]} className={'text-base text-zinc-600 dark:text-zinc-400 prose dark:prose-invert max-w-none'}>
               {item.data.selftext}
             </ReactMarkdown>
             :
