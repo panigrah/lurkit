@@ -2,27 +2,14 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { useAtom } from 'jotai';
 import { previewAtom } from '../app/atoms';
-import { Fragment, useEffect, useRef, useState } from 'react';
+import { Fragment, useRef } from 'react';
 import ReactHlsPlayer from 'react-hls-player';
-import { GalleryMetaDataType } from '@/types';
-import useEmblaCarousel from 'embla-carousel-react'
 import { decode } from 'he';
-import Dots from './dots';
 import { XCircleIcon } from '@heroicons/react/24/solid';
-import 'react-photoswipe/lib/photoswipe.css'
-import {PhotoSwipe} from 'react-photoswipe';
+import 'react-photoswipe/lib/photoswipe.css';
+import { PhotoSwipe } from 'react-photoswipe';
 
 const fallbackMediaURL = ''
-
-function ImageViewer({ src, title}: { src?: string, title: string}) {
-  if( !src ) return null;
-  // eslint-disable-next-line @next/next/no-img-element
-  return (<img 
-    src={src}
-    className='w-full h-auto'
-    alt={title}
-  />)
-}
 
 function VideoViewer({ src }: { src: string, title?: string}) {
   const playerRef = useRef<HTMLVideoElement>(null);
@@ -37,55 +24,6 @@ function VideoViewer({ src }: { src: string, title?: string}) {
     />
   )
 }
-
-function GalleryViewer({ src }: { src?: {[index: string]: GalleryMetaDataType}, title?: string }) {
-  const [emblaRef, emblaApi] = useEmblaCarousel()
-  const [selectedIndex, setSelectedIndex] = useState(0);
-
-  useEffect(() => {
-    function selectHandler() {
-      // selectedScrollSnap gives us the current selected index.
-      const index = emblaApi?.selectedScrollSnap();
-      setSelectedIndex(index || 0);
-    }
-
-    emblaApi?.on("select", selectHandler);
-    // cleanup
-    return () => {
-      emblaApi?.off("select", selectHandler);
-    };
-  }, [emblaApi]);
-
-  if(!src) return null;
-  const length = Object.values(src).length
-
-  return (
-    <>
-    <div className="overflow-hidden flex-auto" ref={emblaRef}>
-      <div className="flex">
-      {Object.values(src).map((item, i) => {
-          return (
-            // 👇 style each individual slide.
-            // relative - needed since we use the fill prop from next/image component
-            // h-64 - arbitrary height
-            // flex[0_0_100%]
-            //   - shorthand for flex-grow:0; flex-shrink:0; flex-basis:100%
-            //   - we want this slide to not be able to grow or shrink and take up 100% width of the viewport.
-            <div className="relative h-auto flex-[0_0_100%] flex" key={i}>
-              {/* use object-cover + fill since we don't know the height and width of the parent */}
-              <div className='bg-slate-100 rounded-md mt-2 dark:bg-slate-900 flex-auto'>
-                 <img src={decode(item.s.u)} className='object-contain h-full w-full'/>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-    </div>
-    <Dots itemsLength={length} selectedIndex={selectedIndex} />
-    </>
-  )
-}
-
 
 export function MediaViewer() {
   const [preview, setPreview] = useAtom(previewAtom);
@@ -159,14 +97,8 @@ export function MediaViewer() {
                   </button>
                 </Dialog.Title>
                 <div className='p-4'>
-                    { type === 'image' && 
-                      <ImageViewer src={media_url} title={preview?.title || 'unknown'} />
-                    }
                     { type === 'hosted:video' && 
                       <VideoViewer src={media_url || fallbackMediaURL} title={preview?.title || 'unknown'} />
-                    }
-                    { type === 'gallery' && 
-                      <GalleryViewer src={preview?.media_metadata} title={preview?.title || 'unknown'} />
                     }
                     </div>
                 {/*

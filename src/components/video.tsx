@@ -7,7 +7,7 @@ import { useAtomValue } from "jotai";
 import { useRef } from "react";
 import ReactHlsPlayer from "react-hls-player";
 import ReactPlayer from "react-player";
-
+import HlsJs from 'hls.js';
 
 /*
 const VideoEl = styled.video<{ blur?: boolean }>`
@@ -89,38 +89,37 @@ export default function Video({ src, controls, blur, className }: VideoProps) {
 }
 */
 
-export function HLSVideo({ src, index }: { src: string, title?: string, index?: number}) {
+function HLSVideo({ src, poster, index }: { src: string, poster?: string, title?: string, index?: number}) {
   const playerRef = useRef<HTMLVideoElement>(null);
-  const scrollPos = useAtomValue(scrollPositionAtom) + 1
-/*
-  useEffect(() => {
-    if(scrollPos === index && playerRef.current?.paused) {
-      playerRef.current?.play()
-    } else {
-      playerRef.current?.pause()
-    }
-  }, [scrollPos, index])
-*/
-
+  //const scrollPos = useAtomValue(scrollPositionAtom) + 1
+  //const nativeHLS = (document.createElement('video').canPlayType('application/vnd.apple.mpegurl')) && HlsJs.isSupported()
+    
   return(
-    <ReactHlsPlayer
-      src={src}
-      autoPlay={false} //scrollPos === index}
-      controls={true}
-      width="100%"
-      height="auto"
-      playerRef={playerRef}
-    />
+    <>
+      {HlsJs.isSupported() ?
+        <ReactHlsPlayer src={src} controls playerRef={playerRef} width='100%' height='auto' autoPlay={false} />
+        :
+        <video poster={poster} src={src} controls width='100%' height={'auto'} autoPlay={false} />
+      }
+    </>
   )
 }
 
 export function Video({item}: {item: FeedDataType}) {
   const ref = useRef<ReactPlayer>(null)
+  const posterImage = item.preview?.images?.[0]?.source.url
+
   if(item.media?.reddit_video?.hls_url) {
-    const hls_url = item.media.reddit_video.hls_url
-    return(<HLSVideo src={decode(hls_url)} />)
+    const posterUrl = posterImage? decode(posterImage): ''
+    const hls_url = decode(item.media.reddit_video.hls_url)
+    return(<HLSVideo src={hls_url} poster={posterUrl} />)
   } else if( item.post_hint === 'rich:video' && item.url) {
-    return <ReactPlayer ref={ref} url={decode(item.url)}  />
+    const config = posterImage ?  { file: { attributes: { poster: decode(posterImage) }}} : {} 
+    return <ReactPlayer 
+      ref={ref} 
+      url={decode(item.url)} 
+      config={config}
+      />
   } else {
     return <div className="p-4 text-center flex-auto items-center flex flex-col justify-center">
             <div className="text-rose-500">unknown media type {item.media?.type}</div>
