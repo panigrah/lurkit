@@ -38,7 +38,7 @@ export function MediaViewer() {
     let items:any = []
     if( type === 'gallery') {
       const g = preview?.media_metadata || {}
-      items = Object.values(g).map( g => ({
+      items = Object.values(g).filter(g => g.status === 'valid').map( g => ({
         src: decode(g.s.u),
         w: g.s.x,
         h: g.s.y,
