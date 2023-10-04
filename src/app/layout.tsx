@@ -1,10 +1,11 @@
 import './globals.css'
-import { Analytics } from '@vercel/analytics/react';
+//import { Analytics } from '@vercel/analytics/react';
 import Navbar from './navbar';
 import ContextProviders from './ContextProviders';
 import AuthProvider from './Session';
 import { BottomNav } from './BottomNav';
 import { MediaViewer } from '@/components/MediaViewer';
+import Script from 'next/script'
 
 export default function RootLayout({
   children,
@@ -14,6 +15,16 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <Script src="https://www.googletagmanager.com/gtag/js?id=G-PKSW6RWBKJ" />
+        <Script id="google-analytics">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+  
+            gtag('config', 'G-PKSW6RWBKJ');
+          `}
+        </Script>
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#1F2937" />
         <meta name="application-name" content="Lurk on Reddit" />
@@ -42,7 +53,7 @@ export default function RootLayout({
           <BottomNav />
         </ContextProviders>
         </AuthProvider>
-        <Analytics />
+        {/* <Analytics /> */}
       </body>
     </html>
   )
