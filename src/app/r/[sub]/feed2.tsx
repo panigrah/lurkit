@@ -1,8 +1,8 @@
 'use client';
-import { communitySettingsAtom, scrollPositionAtom } from '@/app/atoms';
+import { communitySettingsAtom, scrollPositionAtom, sortByAtom } from '@/app/atoms';
 import { useMutateSubscriptions, useQuerySubscriptions } from "@/app/s/queries";
 import { Spinner } from '@/components/Spinner';
-import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
+import { ArrowsUpDownIcon, ClockIcon, ExclamationTriangleIcon, HeartIcon, StarIcon } from '@heroicons/react/24/outline';
 import { ChevronUpIcon } from '@heroicons/react/24/solid';
 import { useAtom } from 'jotai';
 import { useRef } from 'react';
@@ -55,6 +55,7 @@ function SubscriptionControl({ item, enabled }: { item?: string | string[], enab
 
 export default function Feed({ topic = 'popular', title, subreddit = true }: { topic?: string | string[], title?: string, subreddit?: boolean }) {
   const url = typeof topic === 'string' ? topic : topic.join('+')
+  const [sortBy, setSortBy] = useAtom(sortByAtom)
   const [settings, setSettings] = useAtom(communitySettingsAtom)  
   const scrollPos = settings[url]?.pos ?? 0
   const ref = useRef<VirtuosoHandle>(null)
@@ -66,7 +67,7 @@ export default function Feed({ topic = 'popular', title, subreddit = true }: { t
     hasNextPage,
     isFetching,
     isFetchingNextPage,
-  } = useQueryFeed(topic)
+  } = useQueryFeed(topic, sortBy)
   
   const parentRef = useRef<HTMLDivElement>(null)
   const items = data?.pages.length ? data.pages.flatMap(page => page.data.children) : []
@@ -77,6 +78,10 @@ export default function Feed({ topic = 'popular', title, subreddit = true }: { t
     if(!isEmpty && hasNextPage && !isFetchingNextPage ) {
       fetchNextPage()
     }
+  }
+
+  const toggleSort = () => {
+    setSortBy( sortBy === 'new'? 'top' : 'new')
   }
 
   if (error) {
@@ -93,16 +98,27 @@ export default function Feed({ topic = 'popular', title, subreddit = true }: { t
     return <FeedSkeleton />
   }
   
+  
   return (
     <>
+    <div className='fixed z-[90] bottom-16 right-8'>
+      <button 
+        onClick={() => {
+          toggleSort()
+          ref.current?.scrollToIndex(0)
+        }}
+        className='bg-indigo-400 text-white flex drop-shadow-lg rounded-full w-10 h-10 justify-center items-center mb-2'>
+          {sortBy === 'new'? <ClockIcon className='w-5 h-5' />: <StarIcon className='w-5 h-5' /> }
+      </button>
       <button 
         onClick={() => {
           setSettings( prev => ({ ...prev, [url]: { pos: 0 }}))
           ref.current?.scrollToIndex(0)
         }}
-        className='fixed z-[90] bottom-16 right-8 bg-indigo-600 text-white flex drop-shadow-lg rounded-full w-10 h-10 justify-center items-center'>
+        className='bg-indigo-400 text-white flex drop-shadow-lg rounded-full w-10 h-10 justify-center items-center'>
         <ChevronUpIcon className='w-5 h-5' />
       </button>
+      </div>
       <div className='flex flex-auto overflow-hidden'>
         <section
           ref={parentRef}

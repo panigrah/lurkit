@@ -4,7 +4,7 @@ import { Combobox, Listbox, Transition } from '@headlessui/react'
 import { CheckIcon, ChevronUpDownIcon, MagnifyingGlassCircleIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import { useSession } from 'next-auth/react';
 import { useQuerySubscriptions } from './s/queries'
-import { BackspaceIcon, BackwardIcon, ChevronDownIcon, ChevronLeftIcon } from '@heroicons/react/24/solid'
+import { BackspaceIcon, BackwardIcon, ChevronDownIcon, ChevronLeftIcon, InformationCircleIcon } from '@heroicons/react/24/solid'
 import { useRouter } from 'next/navigation';
 import { SubscriptionType } from '@/types';
 import { useAtom } from 'jotai';
@@ -199,11 +199,16 @@ export default function Navbar() {
           <ChevronLeftIcon className='w-6 h-6 stroke-slate-400 fill-slate-400' />
         </button>
         <SelectAndSearchCommunity />
+        <div className='flex gap-x-2'>
         {activeCommunity?.sub && 
           <Link href={`/r/${activeCommunity?.sub}/search`}>
             <MagnifyingGlassIcon className='w-6 h-6 stroke-slate-400' />
           </Link>
         }
+        <Link href='/about'>
+          <InformationCircleIcon className='w-6 h-6 stroke-slate-400' />
+        </Link>
+        </div>
       </div>
     </nav>
   )
