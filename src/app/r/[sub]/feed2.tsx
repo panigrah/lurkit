@@ -5,11 +5,12 @@ import { Spinner } from '@/components/Spinner';
 import { ArrowsUpDownIcon, ClockIcon, ExclamationTriangleIcon, FireIcon, HeartIcon, StarIcon } from '@heroicons/react/24/outline';
 import { ChevronUpIcon } from '@heroicons/react/24/solid';
 import { useAtom } from 'jotai';
-import { useRef } from 'react';
+import { Fragment, useRef } from 'react';
 import { Virtuoso, VirtuosoHandle } from 'react-virtuoso';
 import { FeedSkeleton } from './feed-skeleton';
 import Post from './post';
 import { useQueryFeed } from './queries';
+import { Menu, Transition } from '@headlessui/react';
 
 function Footer({ context = {} }: { context?: { hasNextPage?: boolean, isFetching?: boolean }}) {
   const {hasNextPage, isFetching} = context;
@@ -53,6 +54,14 @@ function SubscriptionControl({ item, enabled }: { item?: string | string[], enab
   }
 }
 
+const sortByOptions: {label: string, icon: JSX.Element, value: SortOptions}[] = [{
+  label: 'Hot', icon: <FireIcon className='w-5 h-5 mr-2' />, value: 'hot'
+}, { 
+  label: 'Popular', icon: <StarIcon className='w-5 h-5 mr-2' />, value: 'top'
+}, { 
+  label: 'New', icon: <ClockIcon className='w-5 h-5 mr-2' />, value: 'new'
+}]
+
 export default function Feed({ topic = 'popular', title, subreddit = true }: { topic?: string | string[], title?: string, subreddit?: boolean }) {
   const url = typeof topic === 'string' ? topic : topic.join('+')
   const [sortBy, setSortBy] = useAtom(sortByAtom)
@@ -80,12 +89,6 @@ export default function Feed({ topic = 'popular', title, subreddit = true }: { t
     }
   }
 
-  const toggleSort = () => {
-    const sortList = ['new', 'top', 'hot'] as SortOptions[]
-    const nextIndex = (sortList.findIndex(s => sortBy === s) + 1) % 3
-    setSortBy(sortList[nextIndex])
-  }
-
   if (error) {
     return <div className='flex flex-auto items-center'>
       <div className='m-auto text-center'>
@@ -103,20 +106,43 @@ export default function Feed({ topic = 'popular', title, subreddit = true }: { t
   return (
     <>
     <div className='fixed z-[90] bottom-16 right-8'>
-      <button 
-        onClick={() => {
-          toggleSort()
-          ref.current?.scrollToIndex(0)
-        }}
-        className='bg-indigo-400 text-white flex drop-shadow-lg rounded-full w-10 h-10 justify-center items-center mb-2'>
-          {sortBy === 'new'? 
-            <ClockIcon className='w-5 h-5' />
-            : sortBy === 'hot'?
-            <FireIcon className='w-5 h-5' /> 
-            :
-            <StarIcon className='w-5 h-5' />
-        }
-      </button>
+      <Menu as="div" className="relative inline-block text-left">
+        <div>
+          <Menu.Button className="bg-indigo-400 text-white flex drop-shadow-lg rounded-full w-10 h-10 justify-center items-center mb-2">
+            <ArrowsUpDownIcon
+              className='w-5 h-5'
+              aria-hidden="true"
+            />
+          </Menu.Button>
+        </div>
+        <Transition
+          as={Fragment}
+          enter="transition ease-out duration-100"
+          enterFrom="transform opacity-0 scale-95"
+          enterTo="transform opacity-100 scale-100"
+          leave="transition ease-in duration-75"
+          leaveFrom="transform opacity-100 scale-100"
+          leaveTo="transform opacity-0 scale-95"
+        >
+          <Menu.Items className="-top-2 transform -translate-y-full absolute right-0 w-56 origin-top-right divide-y divide-gray-400 text-slate-50 bg-indigo-400 rounded-md shadow-lg  focus:outline-none">
+            { sortByOptions.map(o => 
+              <div className="px-1 py-1" key={o.value}>
+                <Menu.Item>
+                  <button 
+                    onClick={() => setSortBy(o.value)} 
+                    className='group flex w-full items-center rounded-md px-2 py-2 text-sm'
+                  >
+                    {o.icon}
+                    {o.label}
+                  </button>
+                </Menu.Item>
+              </div>
+            )
+          }
+          </Menu.Items>
+          </Transition>
+      </Menu>
+      
       <button 
         onClick={() => {
           setSettings( prev => ({ ...prev, [url]: { pos: 0 }}))

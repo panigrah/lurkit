@@ -7,8 +7,8 @@ export const useQueryFeed = (topic: string | string[], sortBy = 'hot' as SortOpt
   queryFn: async ({pageParam = ''}) => {
     const url = typeof topic === 'string' ? topic : topic.join('+')
     const sorted_url = sortBy !== 'hot'? `${url}/${sortBy}`: url
-    const result = await fetch(`https://old.reddit.com/r/${sorted_url}.json?&after=${pageParam}`)
-    //const result = await fetch(`/api/feed/${url}?after=${pageParam}&sort=${sortBy}`)
+    //const result = await fetch(`https://old.reddit.com/r/${sorted_url}.json?&after=${pageParam}`)
+    const result = await fetch(`/api/feed/${url}?after=${pageParam}&sort=${sortBy}`)
       .then((res) => res.json())
     if (result && 'error' in result) {
       throw result
