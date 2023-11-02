@@ -1,8 +1,8 @@
 'use client';
-import { communitySettingsAtom, scrollPositionAtom, sortByAtom } from '@/app/atoms';
+import { SortOptions, communitySettingsAtom, scrollPositionAtom, sortByAtom } from '@/app/atoms';
 import { useMutateSubscriptions, useQuerySubscriptions } from "@/app/s/queries";
 import { Spinner } from '@/components/Spinner';
-import { ArrowsUpDownIcon, ClockIcon, ExclamationTriangleIcon, HeartIcon, StarIcon } from '@heroicons/react/24/outline';
+import { ArrowsUpDownIcon, ClockIcon, ExclamationTriangleIcon, FireIcon, HeartIcon, StarIcon } from '@heroicons/react/24/outline';
 import { ChevronUpIcon } from '@heroicons/react/24/solid';
 import { useAtom } from 'jotai';
 import { useRef } from 'react';
@@ -81,7 +81,9 @@ export default function Feed({ topic = 'popular', title, subreddit = true }: { t
   }
 
   const toggleSort = () => {
-    setSortBy( sortBy === 'new'? 'top' : 'new')
+    const sortList = ['new', 'top', 'hot'] as SortOptions[]
+    const nextIndex = (sortList.findIndex(s => sortBy === s) + 1) % 3
+    setSortBy(sortList[nextIndex])
   }
 
   if (error) {
@@ -98,7 +100,6 @@ export default function Feed({ topic = 'popular', title, subreddit = true }: { t
     return <FeedSkeleton />
   }
   
-  
   return (
     <>
     <div className='fixed z-[90] bottom-16 right-8'>
@@ -108,7 +109,13 @@ export default function Feed({ topic = 'popular', title, subreddit = true }: { t
           ref.current?.scrollToIndex(0)
         }}
         className='bg-indigo-400 text-white flex drop-shadow-lg rounded-full w-10 h-10 justify-center items-center mb-2'>
-          {sortBy === 'new'? <ClockIcon className='w-5 h-5' />: <StarIcon className='w-5 h-5' /> }
+          {sortBy === 'new'? 
+            <ClockIcon className='w-5 h-5' />
+            : sortBy === 'hot'?
+            <FireIcon className='w-5 h-5' /> 
+            :
+            <StarIcon className='w-5 h-5' />
+        }
       </button>
       <button 
         onClick={() => {
