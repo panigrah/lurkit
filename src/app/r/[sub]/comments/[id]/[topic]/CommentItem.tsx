@@ -8,7 +8,7 @@ import { ExclamationTriangleIcon, StopCircleIcon } from '@heroicons/react/24/sol
 import { count } from '@/lib/format';
 import { useQuery } from '@tanstack/react-query';
 import { Spinner } from '@/components/Spinner';
-import { ReactMarkdown } from 'react-markdown/lib/react-markdown';
+import ReactMarkdown from 'react-markdown'
 import remarkGiphy from './remark-giphy';
 import remarkGfm from 'remark-gfm';
 
@@ -69,8 +69,8 @@ export function CommentItem({ item, sub, link, depth }: { item: CommentItemType;
       <div className='flex flex-row flex-none border-b dark:border-b-slate-700 py-2'>
         <div
           className={'flex-none w-1 h-auto align-top flex disabled:text-gray-500 py-1 mr-2 border-l-2 ' + depthColors[colorIndex]}
-          />
-          <LoadMore sub={sub} link={link} item={item} />
+        />
+        <LoadMore sub={sub} link={link} item={item} />
       </div>
     );
   }
@@ -108,7 +108,16 @@ export function CommentItem({ item, sub, link, depth }: { item: CommentItemType;
             </div>
           </div>
           {!collapsed &&
-            <ReactMarkdown 
+            <ReactMarkdown
+              urlTransform={(url, key, node) => {
+                let retURL = url
+                if (url.startsWith('https://www.reddit.com/r/')) {
+                  retURL = url.replace('https://www.reddit.com/r/', 'https://lurkit.vercel.app/r/')
+                }
+                //replace all the &amp;s with &s
+                retURL = retURL.replace(/&amp;/g, '&')
+                return (retURL)
+              }}
               remarkPlugins={[remarkGiphy, remarkGfm]}
               className='mt-0.5 text-base prose dark:prose-invert max-w-none break-words hyphens-auto word-break-break-word'
             >

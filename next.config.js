@@ -6,7 +6,7 @@ const withPWA = require('next-pwa')({
 const nextConfig = {
   experimental: {
     scrollRestoration: true,
-  },
+  }
 }
 
 module.exports = withPWA(nextConfig)
