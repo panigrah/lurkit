@@ -11,6 +11,7 @@ import { Spinner } from '@/components/Spinner';
 import ReactMarkdown from 'react-markdown'
 import remarkGiphy from './remark-giphy';
 import remarkGfm from 'remark-gfm';
+import Link from 'next/link';
 
 const depthColors = [
   'border-l-slate-400 dark:border-l-slate-600',
@@ -89,7 +90,11 @@ export function CommentItem({ item, sub, link, depth }: { item: CommentItemType;
               <div
                 className={'flex-shrink ' + (item.data.is_submitter ? ' text-indigo-500 font-semibold' : '')}
               >
-                {item.data.author}
+                {item.data.author.startsWith("[") ?
+                  item.data.author
+                  :
+                  <Link href={`/u/${item.data.author}`}>{item.data.author}</Link>
+                }
               </div>
               {item.data.author_flair_text &&
                 <div className='flex-shrink'>
@@ -102,9 +107,9 @@ export function CommentItem({ item, sub, link, depth }: { item: CommentItemType;
               </div>
             </div>
             <div className='flex'>
-              <div className=''>
+              <button className='' onClick={() => setCollapse(!collapsed)}>
                 {formatRelative(fromUnixTime(item.data.created), Date.now())}
-              </div>
+              </button>
             </div>
           </div>
           {!collapsed &&

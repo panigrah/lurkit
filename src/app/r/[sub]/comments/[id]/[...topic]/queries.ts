@@ -12,7 +12,7 @@ export const useQueryPost = (topic: string, sub: string, id: string) =>
     queryFn: ({ pageParam = "" }) => {
       return fetch(
         `https://old.reddit.com/r/${sub}/comments/${id}/${topic}.json?after=${pageParam}`
-        //  `/api/feed/${sub}/comments/${id}/${topic}.json?after=${pageParam}`
+        //`/api/feed/${sub}/comments/${id}/${topic}.json?after=${pageParam}`
       ).then((res) => res.json());
     },
     getNextPageParam: (lastPage, pages) => true,

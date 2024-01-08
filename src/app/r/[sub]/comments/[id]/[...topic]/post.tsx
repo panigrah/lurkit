@@ -6,12 +6,12 @@ import { useQueryPost } from "./queries"
 import { ExclamationTriangleIcon, InboxIcon } from "@heroicons/react/24/solid"
 import { CommentThread } from "./CommentThread"
 
-export default function PostPage({ params: { sub, id, topic } }: { params: { sub: string, id: string, topic: string } }) {
+export default function PostPage({ params: { sub, id, topic } }: { params: { sub: string, id: string, topic: string[] } }) {
   const { isLoading, error, data, fetchNextPage,
     hasNextPage,
     isFetching,
     isFetchingNextPage,
-  } = useQueryPost(topic, sub, id)
+  } = useQueryPost(topic[0], sub, id)
 
   const post = data?.pages?.[0]?.[0].data.children[0]
   const items = data?.pages.length ? data.pages.map(page => page[1].data.children).flat() : []
@@ -47,16 +47,16 @@ export default function PostPage({ params: { sub, id, topic } }: { params: { sub
               <Post item={post} expand={true} />
             </div>
             <div className="flex flex-auto max-w-[30rem] mx-auto w-full">
-            {items.length === 0 ?
-              <div className='items-center h-full flex-auto flex'>
-                <div className='m-auto align-middle text-center'>
-                  <InboxIcon className='w-10 h-10 mx-auto stroke-slate-400 dark:stroke-slate-600' />
-                  <div className='text-slate-400 dark:text-slate-600 font-semibold'>No comments yet</div>
+              {items.length === 0 ?
+                <div className='items-center h-full flex-auto flex'>
+                  <div className='m-auto align-middle text-center'>
+                    <InboxIcon className='w-10 h-10 mx-auto stroke-slate-400 dark:stroke-slate-600' />
+                    <div className='text-slate-400 dark:text-slate-600 font-semibold'>No comments yet</div>
+                  </div>
                 </div>
-              </div>
-              :
-              <CommentThread sub={post.data.subreddit} link={post.data.name} items={items} depth={0} />
-            }
+                :
+                <CommentThread sub={post.data.subreddit} link={post.data.name} items={items} depth={0} />
+              }
             </div>
           </div>
         </div>

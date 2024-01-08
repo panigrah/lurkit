@@ -5,7 +5,7 @@ import Link from "next/link"
 import { useRef, useEffect, useState } from "react"
 import { communitySettingsAtom, scrollPositionAtom } from "../atoms"
 import ReactMarkdown from "react-markdown"
-import remarkGiphy from "../r/[sub]/comments/[id]/[topic]/remark-giphy"
+import remarkGiphy from "../r/[sub]/comments/[id]/[...topic]/remark-giphy"
 import { decode } from "he"
 
 function Component({ id }: { id: string }) {

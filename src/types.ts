@@ -1,32 +1,31 @@
-
 export type ImageType = {
   url: string;
   width: number;
   height: number;
-}
+};
 
 export type PreviewType = {
   images: {
     source: ImageType;
-    resolutions: ImageType[]
-  }[]
+    resolutions: ImageType[];
+  }[];
   enabled: boolean;
-}
+};
 
 type GalleryImageType = {
-    x: number; //width
-    y: number; //height
-    u: string; //url
-}
+  x: number; //width
+  y: number; //height
+  u: string; //url
+};
 
 export type GalleryMetaDataType = {
   status: string; // valid
   e: string; //type eg. image
   m: string; //image type eg image/jpg
   id: string;
-  p: GalleryImageType[]
+  p: GalleryImageType[];
   s: GalleryImageType;
-}
+};
 
 export type MediaType = {
   type?: string;
@@ -50,15 +49,22 @@ export type MediaType = {
     height: number;
     width: number;
     duration: number;
-  }
-}
+  };
+};
 
 export type FeedDataType = {
-  post_hint: "hosted:video" | "link" | "text" | "image" | "gallery" | "rich:video";
+  post_hint:
+    | "hosted:video"
+    | "link"
+    | "text"
+    | "image"
+    | "gallery"
+    | "rich:video";
   subreddit: string;
   author_fullname: string;
   selftext?: string;
   title: string;
+  link_title?: string;
   subreddit_name_prefixed: string;
   thumbnail_height: number | null;
   thumbnail_width: number | null;
@@ -85,26 +91,24 @@ export type FeedDataType = {
   is_video: boolean;
   media?: MediaType;
   preview?: PreviewType;
-  media_metadata?: {[index: string]: GalleryMetaDataType};
+  media_metadata?: { [index: string]: GalleryMetaDataType };
   gallery_data?: any;
   url_overridden_by_dest?: string;
-}
+};
 
 export type FeedItemType = {
   kind: string;
-  data: FeedDataType
-}
+  data: FeedDataType;
+};
 
 export type FeedItemListingType = {
   kind: string;
   data: {
     after: string;
     dist: number;
-    children: FeedItemType[]
-  }
-}
-
-
+    children: FeedItemType[];
+  };
+};
 
 export type CommentItemType = {
   kind: string;
@@ -129,27 +133,27 @@ export type CommentItemType = {
     author_flair_text: string;
     replies?: CommentItemListType;
     count: number;
-    children?: string[]
-  }
-}
+    children?: string[];
+  };
+};
 
 export type CommentItemListType = {
   kind: string;
   data: {
     after: string;
-    children: CommentItemType[]
-  }
-}
+    children: CommentItemType[];
+  };
+};
 export type PostCommentsListingType = [
   FeedItemListingType,
-  CommentItemListType,
-]
+  CommentItemListType
+];
 
 export type SubscriptionType = {
   id: string;
   sub: string;
   path?: string;
-}
+};
 
 export type BookMarkType = {
   id: string;
@@ -157,10 +161,11 @@ export type BookMarkType = {
   permalink: string;
   title: string;
   selftext?: string;
-}
+};
 
 export type CommunitySettingsType = {
   [index: string]: {
     pos: number; //scroll position
     refreshTime?: number; //when last viewed
-  }};
+  };
+};

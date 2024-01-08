@@ -81,10 +81,13 @@ export default function Post({ item, expand = false, index }: { item: FeedItemTy
 
   const type = getFeedType(item)
   //for gallery the preview is in the gallery metadata
-  if(type === 'gallery' && !src && item.data.media_metadata) {
+  if (type === 'gallery' && !src && item.data.media_metadata) {
     const firstItem = Object.values(item.data.media_metadata)[0]
     src = firstItem.s.u
   }
+
+  const title = item.data.title || item.data.link_title || ''
+
   return (
     <div className="relative card space-y-4 w-full">
       {/* Heading */}
@@ -93,7 +96,7 @@ export default function Post({ item, expand = false, index }: { item: FeedItemTy
           <div className="flex gap-3 items-center">
             <h2 className=" font-semibold">
               <Link href={`${item.data.permalink}`} scroll={false}>
-                {decode(item.data.title)}
+                {decode(title)}
               </Link>
             </h2>
           </div>
@@ -109,13 +112,13 @@ export default function Post({ item, expand = false, index }: { item: FeedItemTy
       {/* Posted Image */}
       {src &&
         <div className="flex relative -mx-5 aspect-square overflow-hidden">
-          { ((type === 'video' || type === 'rich:video') && media) ?
+          {((type === 'video' || type === 'rich:video') && media) ?
             <Video item={item.data} />
             :
             <>
               {/** show video, gallery or image or nothing... depending on whats posted ***/}
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img className="w-full bg-cover object-cover aspect-square" src={decode(src)} alt={item.data.title} />
+              <img className="w-full bg-cover object-cover aspect-square" src={decode(src)} alt={title} />
               <PreviewControl item={item} type={type} />
             </>
           }
@@ -144,7 +147,17 @@ export default function Post({ item, expand = false, index }: { item: FeedItemTy
         </div>
         {item.data.selftext && (
           expand ?
-            <ReactMarkdown rehypePlugins={[rehypeRaw]} className={'text-base text-zinc-600 dark:text-zinc-400 prose dark:prose-invert max-w-none'}>
+            <ReactMarkdown
+              urlTransform={(url, key, node) => {
+                let retURL = url
+                if (url.startsWith('https://www.reddit.com/r/')) {
+                  retURL = url.replace('https://www.reddit.com/r/', 'https://lurkit.vercel.app/r/')
+                }
+                //replace all the &amp;s with &s
+                retURL = retURL.replace(/&amp;/g, '&')
+                return (retURL)
+              }}
+              rehypePlugins={[rehypeRaw]} className={'text-base text-zinc-600 dark:text-zinc-400 prose dark:prose-invert max-w-none'}>
               {item.data.selftext}
             </ReactMarkdown>
             :
