@@ -45,7 +45,7 @@ export const useUserFeed = (user: string, sortBy = "hot" as SortOptions) =>
       const url = user;
       //const sorted_url = sortBy !== "hot" ? `${url}/${sortBy}` : url;
       const result = await fetch(
-        `https://old.reddit.com/u/${url}.json?after=${pageParam}&count=25`
+        `https://old.reddit.com/u/${url}.json?&after=${pageParam}`
         //`/api/u/${url}?after=${pageParam}&count=25`
       ).then((res) => res.json());
       if (result && "error" in result) {
