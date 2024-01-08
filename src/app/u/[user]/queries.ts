@@ -44,8 +44,9 @@ export const useUserFeed = (user: string, sortBy = "hot" as SortOptions) =>
     queryFn: async ({ pageParam = "" }) => {
       const url = user;
       //const sorted_url = sortBy !== "hot" ? `${url}/${sortBy}` : url;
+      const params = pageParam ? "?after=" + pageParam : "";
       const result = await fetch(
-        `https://old.reddit.com/u/${url}.json?&after=${pageParam}`
+        `https://old.reddit.com/u/${url}.json${params}`
         //`/api/u/${url}?after=${pageParam}&count=25`
       ).then((res) => res.json());
       if (result && "error" in result) {
