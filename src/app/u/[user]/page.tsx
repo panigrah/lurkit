@@ -37,6 +37,14 @@ function Post({ item }: { item: UserFeedListing }) {
             <ArrowUpIcon className='w-4 h-4' />
             <span>{count(post.ups)}</span>
           </div>
+          <div className="flex">
+            <Link
+              href={`/r/${post.subreddit}`}
+              className="text-zinc-600 dark:text-zinc-400 text-sm"
+            >
+              /r/{post.subreddit}
+            </Link>
+          </div>
         </div>
         <div className='flex'>
           {formatRelative(fromUnixTime(post.created), Date.now())}
