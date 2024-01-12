@@ -126,19 +126,17 @@ export default function Feed({ topic = 'popular', title, subreddit = true }: { t
           >
             <Menu.Items className="-top-2 transform -translate-y-full absolute right-0 w-56 origin-top-right divide-y divide-gray-400 text-slate-50 bg-indigo-400 rounded-md shadow-lg  focus:outline-none">
               {sortByOptions.map(o =>
-                <div className={"px-1 py-1 flex items-center"} key={o.value}>
-                  <Menu.Item>
-                    <button
-                      onClick={() => setSortBy(o.value)}
-                      disabled={o.value === sortBy}
-                      className='group flex w-full items-center rounded-md px-2 py-2 text-sm'
-                    >
-                      {o.icon}
-                      {o.label}
-                    </button>
-                    {o.value === sortBy && <CheckIcon className='w-5 h-5 mr-2' />}
-                  </Menu.Item>
-                </div>
+                <Menu.Item as='div' className={'flex items-center flex-auto px-1 py-1'} key={o.value}>
+                  <button
+                    onClick={() => setSortBy(o.value)}
+                    disabled={o.value === sortBy}
+                    className='group flex w-full items-center rounded-md px-2 py-2 text-sm'
+                  >
+                    {o.icon}
+                    {o.label}
+                  </button>
+                  {o.value === sortBy && <CheckIcon className='w-5 h-5 mr-2' />}
+                </Menu.Item>
               )
               }
             </Menu.Items>
