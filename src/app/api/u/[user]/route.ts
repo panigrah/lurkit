@@ -6,7 +6,7 @@ export async function GET(
   { params }: { params: { user: string } }
 ) {
   const { searchParams } = new URL(request.url);
-  const page = searchParams.get("page");
+  const page = searchParams.get("after");
   const count = searchParams.get("count") || 25;
   //Find the absolute path of the json directory
   const results = await fetch(
