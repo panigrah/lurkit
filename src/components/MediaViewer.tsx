@@ -11,9 +11,9 @@ import { PhotoSwipe } from 'react-photoswipe';
 
 const fallbackMediaURL = ''
 
-function VideoViewer({ src }: { src: string, title?: string}) {
+function VideoViewer({ src }: { src: string, title?: string }) {
   const playerRef = useRef<HTMLVideoElement>(null);
-  return(
+  return (
     <ReactHlsPlayer
       src={src}
       autoPlay={false}
@@ -27,23 +27,26 @@ function VideoViewer({ src }: { src: string, title?: string}) {
 
 export function MediaViewer() {
   const [preview, setPreview] = useAtom(previewAtom);
-  const media_url = (preview?.post_hint === 'hosted:video') ? 
-        preview?.media?.reddit_video?.hls_url
-        : (preview?.post_hint === 'image'? preview.url: undefined)
-  
-  const type = (preview?.post_hint? preview.post_hint : (preview?.gallery_data? 'gallery' : 'unknown')) as string
+  const media_url = (preview?.post_hint === 'hosted:video') ?
+    preview?.media?.reddit_video?.hls_url
+    : (preview?.post_hint === 'image' ? preview.url : undefined)
+
+  const type = (preview?.post_hint ? preview.post_hint : (preview?.gallery_data ? 'gallery' : 'unknown')) as string
   const isOpen = preview !== null && (type === 'hosted:video' || type === 'image' || type === 'gallery')
-  
-  if((type === 'gallery' && preview) || (type === 'image' && media_url)) {
-    let items:any = []
-    if( type === 'gallery') {
-      const g = preview?.media_metadata || {}
-      items = Object.values(g).filter(g => g.status === 'valid').map( g => ({
-        src: decode(g.s.u),
-        w: g.s.x,
-        h: g.s.y,
-        title: g.m
-      }))
+
+  if ((type === 'gallery' && preview) || (type === 'image' && media_url)) {
+    let items: any = []
+    if (type === 'gallery') {
+      const media_data = preview?.media_metadata || {}
+      items = preview?.gallery_data?.items.filter(item => media_data[item.media_id]?.status === 'valid').map(item => {
+        const g = media_data[item.media_id]
+        return ({
+          src: decode(g.s.u),
+          w: g.s.x,
+          h: g.s.y,
+          title: g.m
+        })
+      })
     } else {
       const src = preview?.preview?.images?.[0].source.url ?? fallbackMediaURL
       items = [{
@@ -53,7 +56,7 @@ export function MediaViewer() {
         title: preview?.title || 'no title',
       }]
     }
-    return ( <PhotoSwipe isOpen={isOpen} items={items} options={{}} onClose={() => setPreview(null)}/> )
+    return (<PhotoSwipe isOpen={isOpen} items={items} options={{}} onClose={() => setPreview(null)} />)
   }
 
   return (
@@ -97,10 +100,10 @@ export function MediaViewer() {
                   </button>
                 </Dialog.Title>
                 <div className='p-4'>
-                    { type === 'hosted:video' && 
-                      <VideoViewer src={media_url || fallbackMediaURL} title={preview?.title || 'unknown'} />
-                    }
-                    </div>
+                  {type === 'hosted:video' &&
+                    <VideoViewer src={media_url || fallbackMediaURL} title={preview?.title || 'unknown'} />
+                  }
+                </div>
                 {/*
                 <div className="mt-4">
 

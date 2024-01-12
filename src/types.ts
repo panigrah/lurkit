@@ -92,7 +92,12 @@ export type FeedDataType = {
   media?: MediaType;
   preview?: PreviewType;
   media_metadata?: { [index: string]: GalleryMetaDataType };
-  gallery_data?: any;
+  gallery_data?: {
+    items: {
+      media_id: string;
+      id: string;
+    }[];
+  };
   url_overridden_by_dest?: string;
 };
 

@@ -5,7 +5,7 @@ import { Preview } from './Preview';
 import { FeedItemType } from '@/types';
 import Link from 'next/link';
 import { previewAtom } from './atoms';
-import { useAtom } from 'jotai';
+import { useAtom, useSetAtom } from 'jotai';
 import { count } from '@/lib/format';
 import ReactMarkdown from 'react-markdown';
 import { BookMarkControl } from './bookmarks/BookMarkControl';
@@ -46,7 +46,7 @@ export const getFeedType = (item: FeedItemType) => {
 }
 
 export function FeedItem({ item, expand = false }: { item: FeedItemType; expand?: boolean }) {
-  const [preview, setPreview] = useAtom(previewAtom)
+  const setPreview = useSetAtom(previewAtom)
   //is playable media
   const feedType = getFeedType(item)
   const hasPreview = feedItemTypes.includes(feedType)

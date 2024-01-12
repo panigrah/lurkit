@@ -10,7 +10,7 @@ import Link from "next/link";
 import { decode } from "he";
 import { getFeedType } from "@/app/FeedItem";
 import { FolderIcon, MagnifyingGlassCircleIcon, PlayCircleIcon } from "@heroicons/react/24/solid";
-import { useAtom } from "jotai";
+import { useAtom, useSetAtom } from "jotai";
 import { previewAtom } from "@/app/atoms";
 import { Video } from "@/components/video";
 
@@ -43,7 +43,7 @@ export function PostSkeleton() {
 }
 
 function PreviewControl({ type, item }: { type: string, item: FeedItemType }) {
-  const [, setPreview] = useAtom(previewAtom)
+  const setPreview = useSetAtom(previewAtom)
   const onClick = () => {
     if (type !== 'link') {
       setPreview(item.data)
