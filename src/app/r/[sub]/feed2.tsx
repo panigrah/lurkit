@@ -5,12 +5,13 @@ import { Spinner } from '@/components/Spinner';
 import { ArrowsUpDownIcon, CheckIcon, ClockIcon, ExclamationTriangleIcon, FireIcon, HeartIcon, StarIcon } from '@heroicons/react/24/outline';
 import { ChevronUpIcon } from '@heroicons/react/24/solid';
 import { useAtom } from 'jotai';
-import { Fragment, useRef } from 'react';
+import { Fragment, useMemo, useRef } from 'react';
 import { Virtuoso, VirtuosoHandle } from 'react-virtuoso';
 import { FeedSkeleton } from './feed-skeleton';
 import Post from './post';
 import { useQueryFeed } from './queries';
 import { Menu, Transition } from '@headlessui/react';
+import { FeedItemType } from '@/types';
 
 function Footer({ context = {} }: { context?: { hasNextPage?: boolean, isFetching?: boolean } }) {
   const { hasNextPage, isFetching } = context;
@@ -79,7 +80,17 @@ export default function Feed({ topic = 'popular', title, subreddit = true }: { t
   } = useQueryFeed(topic, sortBy)
 
   const parentRef = useRef<HTMLDivElement>(null)
-  const items = data?.pages.length ? data.pages.flatMap(page => page.data.children) : []
+  const items = useMemo(() => {
+    const list = data?.pages.length ? data.pages.flatMap(page => page.data.children) : []
+    const ids = list.map(l => l.data.id)
+    return list.reduce((pv, cv) => {
+      if (pv.findIndex(i => i.data.id === cv.data.id) < 0) {
+        pv.push(cv)
+      }
+      return pv
+    }, [] as FeedItemType[])
+  }, [data])
+
   const isBusy = isLoading || isFetchingNextPage || isFetching
   const isEmpty = items.length === 0 && !isBusy
 
